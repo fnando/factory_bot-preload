@@ -49,10 +49,6 @@ Create your factories on <tt>spec/support/factories.rb</tt>. You may have someth
     "john#{n}"
   end
 
-  Factory.sequence :public_key do |n|
-    File.read(Rails.root.join("spec/fixtures/hash.rsa")) + n.to_s
-  end
-
   Factory.define :user do |f|
     f.name "John Doe"
     f.email { Factory.next(:email) }
