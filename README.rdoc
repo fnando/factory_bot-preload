@@ -39,7 +39,7 @@ On <tt>spec/spec_helper.rb</tt> file, make sure that transactional fixtures are 
     config.mock_with :rspec
   end
 
-Create your fixtures on <tt>spec/support/factories.rb</tt>. You may have something like this:
+Create your factories on <tt>spec/support/factories.rb</tt>. You may have something like this:
 
   Factory.sequence :email do |n|
     "john#{n}@doe.com"
