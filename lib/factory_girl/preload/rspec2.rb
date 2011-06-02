@@ -1,3 +1,5 @@
+require 'rspec/core'
+
 RSpec.configure do |config|
   config.include Factory::Preload::Helpers
   config.before(:suite) do
