@@ -45,6 +45,11 @@ describe Factory::Preload do
       Factory::Preload.reload_factories
     end
 
+    it "freezes object" do
+      users(:john).destroy
+      users(:john).should be_frozen
+    end
+
     it "updates invitation count" do
       users(:john).increment(:invitations)
       users(:john).save
@@ -53,6 +58,7 @@ describe Factory::Preload do
 
     it "reloads factory" do
       users(:john).invitations.should == 0
+      users(:john).should_not be_frozen
     end
   end
 end

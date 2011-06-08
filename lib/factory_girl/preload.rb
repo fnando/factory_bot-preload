@@ -31,7 +31,9 @@ class Factory
 
     def self.reload_factories
       factories.each do |class_name, group|
-        group.values.each {|factory| factory.reload}
+        group.each do |name, factory|
+          factories[class_name][name] = factory.class.find(factory.id)
+        end
       end
     end
   end
