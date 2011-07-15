@@ -26,9 +26,4 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
 
-Factory.preload do
-  factory(:john) { Factory(:user) }
-  factory(:ruby) { Factory(:skill, :user => users(:john)) }
-end
-
 Factory::Preload.run

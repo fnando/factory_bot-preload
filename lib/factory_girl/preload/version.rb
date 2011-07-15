@@ -1,4 +1,4 @@
-class Factory
+module Factory
   module Preload
     module Version
       MAJOR = 0

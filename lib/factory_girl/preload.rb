@@ -1,9 +1,10 @@
-class Factory
+module Factory
   module Preload
     autoload :Helpers, "factory_girl/preload/helpers"
     autoload :Version, "factory_girl/preload/version"
 
     require "factory_girl/preload/rspec2" if defined?(RSpec)
+    require "factory_girl/preload/extension"
 
     class << self
       attr_accessor :preloaders
@@ -36,9 +37,5 @@ class Factory
         end
       end
     end
-  end
-
-  def self.preload(&block)
-    Preload.preloaders << block
   end
 end
