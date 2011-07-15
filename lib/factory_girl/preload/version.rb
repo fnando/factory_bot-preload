@@ -1,10 +1,10 @@
 module Factory
   module Preload
     module Version
-      MAJOR = 0
-      MINOR = 1
-      PATCH = 1
-      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}"
+      MAJOR = 1
+      MINOR = 0
+      PATCH = 0
+      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}.rc1"
     end
   end
 end
