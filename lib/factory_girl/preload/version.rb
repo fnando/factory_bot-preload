@@ -4,7 +4,7 @@ module Factory
       MAJOR = 1
       MINOR = 0
       PATCH = 0
-      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}.rc1"
+      STRING = "#{MAJOR}.#{MINOR}.#{PATCH}"
     end
   end
 end
