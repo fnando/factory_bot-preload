@@ -85,6 +85,24 @@ Like Rails fixtures, FGP will define methods for each model. You can use it on y
     end
   end
 
+The new Factory Girl syntax is also supported:
+
+  FactoryGirl.define do
+    factory :user do |f|
+      f.name "John Doe"
+      f.sequence(:email) {|n| "john#{n}@doe.com"}
+    end
+
+    factory :skill do |f|
+      f.association :user
+    end
+
+    preload do
+      factory(:john) { Factory(:user) }
+      factory(:ruby) { Factory(:skill, :user => users(:john)) }
+    end
+  end
+
 Easy and, probably, faster!
 
 == Maintainer
