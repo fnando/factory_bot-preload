@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "factory_girl-preload"
+require "factory_girl/preload/version"
 
 Gem::Specification.new do |s|
   s.name        = "factory_girl-preload"
