@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "factory_girl", ">= 2.0.0.rc4"
+  s.add_dependency "factory_girl", "~> 2.0"
   s.add_development_dependency "ruby-debug19" if RUBY_VERSION >= "1.9"
   s.add_development_dependency "activerecord", "~> 3.0.6"
   s.add_development_dependency "actionpack", "~> 3.0.6"
