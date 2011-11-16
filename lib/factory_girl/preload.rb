@@ -25,7 +25,11 @@ module Factory
     end
 
     def self.clean(*names)
-      query = ActiveRecord::Base.connection.class.name == "ActiveRecord::ConnectionAdapters::SQLite3Adapter" ? "DELETE FROM %s" : "TRUNCATE TABLE %s"
+      query = case ActiveRecord::Base.connection.adapter_name
+        when "SQLite"     then "DELETE FROM %s"
+        when "PostgreSQL" then "TRUNCATE TABLE %s RESTART IDENTITY"
+        else "TRUNCATE TABLE %s"
+      end
       names = ActiveRecord::Base.descendants.collect(&:table_name).uniq if names.empty?
       names.each {|table| ActiveRecord::Base.connection.execute(query % ActiveRecord::Base.connection.quote_table_name(table))}
     end
