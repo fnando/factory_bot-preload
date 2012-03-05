@@ -8,7 +8,7 @@ module Factory
       def self.included(base)
         Dir[Rails.application.root.join("app/models/**/*.rb")].each do |file|
           require_dependency file
-        end
+        end if defined?(Rails)
 
         ActiveRecord::Base.descendants.each do |model|
           method_name = model.name.underscore.gsub("/", "_").pluralize
