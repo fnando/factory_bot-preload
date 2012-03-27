@@ -1,4 +1,4 @@
-module Factory
+module FactoryGirl
   module Preload
     module Version
       MAJOR = 1

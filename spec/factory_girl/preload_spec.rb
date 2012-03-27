@@ -1,12 +1,12 @@
 require "spec_helper"
 
-describe Factory::Preload do
-  include Factory::Preload::Helpers
+describe FactoryGirl::Preload do
+  include FactoryGirl::Preload::Helpers
 
   it "queues preloader block" do
     block = proc {}
-    Factory.preload(&block)
-    Factory::Preload.preloaders.should include(block)
+    FactoryGirl.preload(&block)
+    FactoryGirl::Preload.preloaders.should include(block)
   end
 
   it "injects model methods" do
@@ -31,18 +31,18 @@ describe Factory::Preload do
 
   it "removes records" do
     User.count.should == 1
-    Factory::Preload.clean
+    FactoryGirl::Preload.clean
     User.count.should == 0
   end
 
   context "reloadable factories" do
     before :all do
-      Factory::Preload.clean
-      Factory::Preload.run
+      FactoryGirl::Preload.clean
+      FactoryGirl::Preload.run
     end
 
     before :each do
-      Factory::Preload.reload_factories
+      FactoryGirl::Preload.reload_factories
     end
 
     it "freezes object" do

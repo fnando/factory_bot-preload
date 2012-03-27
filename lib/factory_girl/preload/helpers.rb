@@ -1,4 +1,4 @@
-module Factory
+module FactoryGirl
   module Preload
     module Helpers
       def self.extended(base)
@@ -31,15 +31,19 @@ module Factory
 
       private
       def factory_get(name, model)
-        factory = Factory::Preload.factories[model.name][name] rescue nil
+        factory = Preload.factories[model.name][name] rescue nil
         raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model" unless factory
         factory
       end
 
+      def create(name, attrs = {})
+        FactoryGirl.create(name, attrs)
+      end
+
       def factory_set(name, &block)
-        record = block.call
-        Factory::Preload.factories[record.class.name] ||= {}
-        Factory::Preload.factories[record.class.name][name.to_sym] = record
+        record = instance_eval(&block)
+        Preload.factories[record.class.name] ||= {}
+        Preload.factories[record.class.name][name.to_sym] = record
       end
     end
   end

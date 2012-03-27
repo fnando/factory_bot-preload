@@ -4,7 +4,7 @@ require "factory_girl/preload/version"
 
 Gem::Specification.new do |s|
   s.name        = "factory_girl-preload"
-  s.version     = Factory::Preload::Version::STRING
+  s.version     = FactoryGirl::Preload::Version::STRING
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Nando Vieira"]
   s.email       = ["fnando.vieira@gmail.com"]
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "factory_girl", "~> 2.0"
+  s.add_dependency "factory_girl", "~> 3.0"
   s.add_development_dependency "activerecord", "~> 3.1"
   s.add_development_dependency "actionpack", "~> 3.1"
   s.add_development_dependency "rspec-rails", "~> 2.7"

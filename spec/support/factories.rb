@@ -9,7 +9,7 @@ FactoryGirl.define do
   end
 
   preload do
-    factory(:john) { Factory(:user) }
-    factory(:ruby) { Factory(:skill, :user => users(:john)) }
+    factory(:john) { create(:user) }
+    factory(:ruby) { create(:skill, :user => users(:john)) }
   end
 end

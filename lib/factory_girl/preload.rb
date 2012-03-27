@@ -1,4 +1,4 @@
-module Factory
+module FactoryGirl
   module Preload
     autoload :Helpers, "factory_girl/preload/helpers"
     autoload :Version, "factory_girl/preload/version"

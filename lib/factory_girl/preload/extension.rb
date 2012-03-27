@@ -1,15 +1,13 @@
-module Factory
+module FactoryGirl
   def self.preload(&block)
     Preload.preloaders << block
   end
-end
 
-module FactoryGirl
   module Syntax
     module Default
       class DSL
         def preload(&block)
-          ::Factory.preload(&block)
+          ::FactoryGirl.preload(&block)
         end
       end
     end
