@@ -2,6 +2,7 @@ ActiveRecord::Schema.define(:version => 0) do
   begin
     drop_table :users
     drop_table :skills
+    drop_table :preloads
   rescue Exception => e
   end
 
@@ -12,6 +13,10 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   add_index :users, :email, :unique => true
+
+  create_table :preloads do |t|
+    t.string :name
+  end
 
   create_table :skills do |t|
     t.references :user

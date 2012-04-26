@@ -8,8 +8,13 @@ FactoryGirl.define do
     f.association :user
   end
 
+  factory :preload do |f|
+    f.name "My Preload"
+  end
+
   preload do
     factory(:john) { create(:user) }
     factory(:ruby) { create(:skill, :user => users(:john)) }
+    factory(:my)   { create(:preload) }
   end
 end

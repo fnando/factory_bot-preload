@@ -21,6 +21,10 @@ describe FactoryGirl::Preload do
     skills(:ruby).should be_a(Skill)
   end
 
+  it "returns :my factory for Preload model" do
+    preloads(:my).should be_a(Preload)
+  end
+
   it "reuses existing factories" do
     skills(:ruby).user.should == users(:john)
   end
