@@ -17,9 +17,9 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "factory_girl", "~> 3.0"
-  s.add_development_dependency "activerecord", "~> 3.1"
-  s.add_development_dependency "actionpack", "~> 3.1"
-  s.add_development_dependency "rspec-rails", "~> 2.7"
-  s.add_development_dependency "mysql2", "~> 0.3"
+  s.add_dependency "factory_girl", ">= 3.0"
+  s.add_development_dependency "activerecord"
+  s.add_development_dependency "actionpack"
+  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "mysql2"
 end
