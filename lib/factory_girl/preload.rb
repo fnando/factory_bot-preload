@@ -14,10 +14,18 @@ module FactoryGirl
     self.preloaders = []
     self.factories = {}
 
+    def self.active_record
+      ActiveRecord::Base
+    end
+
+    def self.connection
+      active_record.connection
+    end
+
     def self.run
       helper = Object.new.extend(Helpers)
 
-      ActiveRecord::Base.connection.transaction :requires_new => true do
+      connection.transaction :requires_new => true do
         preloaders.each do |block|
           helper.instance_eval(&block)
         end
@@ -25,14 +33,18 @@ module FactoryGirl
     end
 
     def self.clean(*names)
-      query = case ActiveRecord::Base.connection.adapter_name
+      query = case connection.adapter_name
         when "SQLite"     then "DELETE FROM %s"
         when "PostgreSQL" then "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
         else "TRUNCATE TABLE %s"
       end
-      names = ActiveRecord::Base.descendants.collect(&:table_name).uniq if names.empty?
-      ActiveRecord::Base.connection.disable_referential_integrity do
-        names.each {|table| ActiveRecord::Base.connection.execute(query % ActiveRecord::Base.connection.quote_table_name(table))}
+
+      names = active_record.descendants.collect(&:table_name).uniq if names.empty?
+
+      connection.disable_referential_integrity do
+        names.each do |table|
+          connection.execute(query % connection.quote_table_name(table))
+        end
       end
     end
 
