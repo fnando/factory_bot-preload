@@ -1,4 +1,4 @@
-require 'rspec/core'
+require "rspec/core"
 
 RSpec.configure do |config|
   config.include FactoryGirl::Preload::Helpers
