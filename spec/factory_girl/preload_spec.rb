@@ -9,6 +9,15 @@ describe FactoryGirl::Preload do
     FactoryGirl::Preload.preloaders.should include(block)
   end
 
+  it "should lazy load all factories, loading only when used" do
+    FactoryGirl::Preload.record_ids['User'][:john].should eq(1)
+    FactoryGirl::Preload.factories['User'][:john].should be_nil
+
+    user = users(:john)
+
+    FactoryGirl::Preload.factories['User'][:john].should eq(user)
+  end
+
   it "injects model methods" do
     expect { users(:john) }.to_not raise_error
   end

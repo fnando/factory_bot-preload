@@ -9,10 +9,12 @@ module FactoryGirl
     class << self
       attr_accessor :preloaders
       attr_accessor :factories
+      attr_accessor :record_ids
     end
 
     self.preloaders = []
     self.factories = {}
+    self.record_ids = {}
 
     def self.active_record
       ActiveRecord::Base
@@ -51,7 +53,7 @@ module FactoryGirl
     def self.reload_factories
       factories.each do |class_name, group|
         group.each do |name, factory|
-          factories[class_name][name] = factory.class.find(factory.id)
+          factories[class_name][name] = nil
         end
       end
     end
