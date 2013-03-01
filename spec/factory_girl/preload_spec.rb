@@ -34,6 +34,14 @@ describe FactoryGirl::Preload do
     preloads(:my).should be_a(Preload)
   end
 
+  it "returns :syd factory for Artist model" do
+    artists(:syd).should be_a(Artist)
+  end
+
+  it "returns :syd factory's name" do
+    artists(:syd).name.should == "Syd Vicious"
+  end
+
   it "reuses existing factories" do
     skills(:ruby).user.should == users(:john)
   end

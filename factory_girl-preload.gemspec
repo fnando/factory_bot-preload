@@ -22,4 +22,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "actionpack"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "mysql2"
+  s.add_development_dependency "mongoid", "~> 3.0"
 end

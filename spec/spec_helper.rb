@@ -11,6 +11,8 @@ require "rspec/rails"
 require "factory_girl"
 require File.dirname(__FILE__) + "/support/factories"
 
+require "mongoid"
+
 module RSpec
   class Application < ::Rails::Application
     config.root = File.dirname(__FILE__) + "/support/app"

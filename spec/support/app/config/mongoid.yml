@@ -1,0 +1,7 @@
+test:
+  sessions:
+    default:
+      database: test
+      hosts:
+        - localhost
+
