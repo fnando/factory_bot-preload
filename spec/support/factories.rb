@@ -18,3 +18,4 @@ FactoryGirl.define do
     factory(:my)   { create(:preload) }
   end
 end
+

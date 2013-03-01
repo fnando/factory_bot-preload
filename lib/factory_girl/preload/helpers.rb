@@ -10,15 +10,8 @@ module FactoryGirl
           require_dependency file
         end if defined?(Rails)
 
-        ActiveRecord::Base.descendants.each do |model|
-          method_name = model.name.underscore.gsub("/", "_").pluralize
-
-          class_eval <<-RUBY, __FILE__, __LINE__
-            def #{method_name}(name)
-              factory(name, ::#{model})
-            end
-          RUBY
-        end
+        create_fixtures_method_for(ActiveRecord::Base.descendants) if defined?(ActiveRecord)
+        create_fixtures_method_for(Mongoid.models) if defined?(Mongoid)
       end
 
       def factory(name, model = nil, &block)
@@ -30,6 +23,18 @@ module FactoryGirl
       end
 
       private
+      def self.create_fixtures_method_for(models)
+        models.each do |model|
+          method_name = model.name.underscore.gsub("/", "_").pluralize
+
+          class_eval <<-RUBY, __FILE__, __LINE__
+            def #{method_name}(name)
+              factory(name, ::#{model})
+            end
+          RUBY
+        end
+      end
+
       def factory_get(name, model)
         factory = Preload.factories[model.name][name]
         if factory.blank? && Preload.factories[model.name].has_key?(name)

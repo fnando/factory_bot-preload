@@ -1,4 +1,4 @@
-require "spec_helper"
+require "spec_helper_active_record"
 
 describe FactoryGirl::Preload do
   include FactoryGirl::Preload::Helpers
@@ -32,6 +32,14 @@ describe FactoryGirl::Preload do
 
   it "returns :my factory for Preload model" do
     preloads(:my).should be_a(Preload)
+  end
+
+  it "returns :syd factory for Artist model" do
+    artists(:sid).should be_a(Artist)
+  end
+
+  it "returns :sid factory's name" do
+    artists(:sid).name.should == "Sid Vicious"
   end
 
   it "reuses existing factories" do
