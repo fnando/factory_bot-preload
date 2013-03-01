@@ -10,18 +10,12 @@ Bundler.require(:default)
 require "rspec/rails"
 require "factory_girl"
 require File.dirname(__FILE__) + "/support/factories"
+require File.dirname(__FILE__) + "/support/factories_mongoid"
 
 require "mongoid"
 
-module RSpec
-  class Application < ::Rails::Application
-    config.root = File.dirname(__FILE__) + "/support/app"
-    config.active_support.deprecation = :log
-    # config.active_record.logger = Logger.new(STDOUT)
-  end
-end
+require File.dirname(__FILE__) + "/support/application"
 
-RSpec::Application.initialize!
 load File.dirname(__FILE__) + "/support/app/db/schema.rb"
 
 RSpec.configure do |config|

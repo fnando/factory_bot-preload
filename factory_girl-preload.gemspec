@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+#
 $:.push File.expand_path("../lib", __FILE__)
 require "factory_girl/preload/version"
 
@@ -23,4 +24,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "mysql2"
   s.add_development_dependency "mongoid"
+  s.add_development_dependency "database_cleaner"
 end

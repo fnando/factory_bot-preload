@@ -27,14 +27,47 @@ module FactoryGirl
     def self.run
       helper = Object.new.extend(Helpers)
 
-      connection.transaction :requires_new => true do
-        preloaders.each do |block|
-          helper.instance_eval(&block)
-        end
+      if defined?(ActiveRecord)
+        run_for_active_record(helper)
+      else
+        run_for_mongoid(helper)
       end
     end
 
     def self.clean(*names)
+      clean_active_record_data(names)
+      clean_mongoid_data(names)
+    end
+
+    def self.reload_factories
+      factories.each do |class_name, group|
+        group.each do |name, factory|
+          factories[class_name][name] = nil
+        end
+      end
+    end
+
+    private
+
+    def self.run_for_active_record(helper)
+      connection.transaction :requires_new => true do
+        run_preloaders(helper)
+      end
+    end
+
+    def self.run_for_mongoid(helper)
+      run_preloaders(helper)
+    end
+
+    def self.run_preloaders(helper)
+      preloaders.each do |block|
+        helper.instance_eval(&block)
+      end
+    end
+
+    def self.clean_active_record_data(names)
+      return unless defined?(ActiveRecord)
+
       query = case connection.adapter_name
         when "SQLite"     then "DELETE FROM %s"
         when "PostgreSQL" then "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
@@ -50,12 +83,17 @@ module FactoryGirl
       end
     end
 
-    def self.reload_factories
-      factories.each do |class_name, group|
-        group.each do |name, factory|
-          factories[class_name][name] = nil
-        end
+    def self.clean_mongoid_data(names)
+      return unless defined?(Mongoid)
+
+      collections = Mongoid.default_session.collections.select { |c| c.name !~ /^system\./ }
+
+      if names.empty?
+        collections.each { |c| c.find.remove_all }
+      else
+        collections.each { |c| c.find.remove_all if names.include?(c.name) }
       end
     end
   end
 end
+

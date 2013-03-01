@@ -1,2 +1,2 @@
 class Preload < ActiveRecord::Base
-end
+end if defined?(ActiveRecord)

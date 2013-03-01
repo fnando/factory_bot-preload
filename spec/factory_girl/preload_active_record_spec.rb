@@ -1,4 +1,4 @@
-require "spec_helper"
+require "spec_helper_active_record"
 
 describe FactoryGirl::Preload do
   include FactoryGirl::Preload::Helpers

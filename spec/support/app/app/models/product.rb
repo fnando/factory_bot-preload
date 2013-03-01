@@ -2,5 +2,5 @@ class Artist
   include Mongoid::Document
 
   field :name, :type => String
-end
+end if defined?(Mongoid)
 

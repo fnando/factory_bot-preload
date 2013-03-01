@@ -12,15 +12,10 @@ FactoryGirl.define do
     f.name "My Preload"
   end
 
-  factory :artist do |f|
-    f.name "Sid Vicious"
-  end
-
   preload do
     factory(:john) { create(:user) }
     factory(:ruby) { create(:skill, :user => users(:john)) }
     factory(:my)   { create(:preload) }
-    factory(:sid)  { create(:artist) }
   end
 end
 
