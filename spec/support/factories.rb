@@ -13,14 +13,14 @@ FactoryGirl.define do
   end
 
   factory :artist do |f|
-    f.name "Syd Vicious"
+    f.name "Sid Vicious"
   end
 
   preload do
     factory(:john) { create(:user) }
     factory(:ruby) { create(:skill, :user => users(:john)) }
     factory(:my)   { create(:preload) }
-    factory(:syd)  { create(:artist) }
+    factory(:sid)  { create(:artist) }
   end
 end
 

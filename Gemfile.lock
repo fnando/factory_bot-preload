@@ -91,6 +91,6 @@ DEPENDENCIES
   actionpack
   activerecord
   factory_girl-preload!
-  mongoid (~> 3.0)
+  mongoid
   mysql2
   rspec-rails

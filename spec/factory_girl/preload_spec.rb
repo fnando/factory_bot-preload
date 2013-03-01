@@ -35,11 +35,11 @@ describe FactoryGirl::Preload do
   end
 
   it "returns :syd factory for Artist model" do
-    artists(:syd).should be_a(Artist)
+    artists(:sid).should be_a(Artist)
   end
 
-  it "returns :syd factory's name" do
-    artists(:syd).name.should == "Syd Vicious"
+  it "returns :sid factory's name" do
+    artists(:sid).name.should == "Sid Vicious"
   end
 
   it "reuses existing factories" do
