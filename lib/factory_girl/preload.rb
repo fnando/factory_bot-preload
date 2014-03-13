@@ -10,11 +10,13 @@ module FactoryGirl
       attr_accessor :preloaders
       attr_accessor :factories
       attr_accessor :record_ids
+      attr_accessor :clean_with
     end
 
     self.preloaders = []
     self.factories = {}
     self.record_ids = {}
+    self.clean_with = :truncation
 
     def self.active_record
       ActiveRecord::Base
@@ -35,10 +37,10 @@ module FactoryGirl
     end
 
     def self.clean(*names)
-      query = case connection.adapter_name
-        when "SQLite"     then "DELETE FROM %s"
-        when "PostgreSQL" then "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
-        else "TRUNCATE TABLE %s"
+      query = case clean_with
+        when :truncation then try_truncation_query
+        when :deletion then "DELETE FROM %s"
+        else raise "Couldn't find #{clean_with} clean type"
       end
 
       names = active_record.descendants.collect(&:table_name).uniq if names.empty?
@@ -55,6 +57,15 @@ module FactoryGirl
         group.each do |name, factory|
           factories[class_name][name] = nil
         end
+      end
+    end
+
+    private
+    def self.try_truncation_query
+      case connection.adapter_name
+        when "SQLite"     then "DELETE FROM %s"
+        when "PostgreSQL" then "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
+        else "TRUNCATE TABLE %s"
       end
     end
   end
