@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    factory_girl-preload (2.0.2)
+    factory_girl-preload (2.1.0)
       factory_girl (>= 3.0)
 
 GEM
