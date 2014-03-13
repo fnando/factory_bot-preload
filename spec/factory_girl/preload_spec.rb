@@ -42,10 +42,25 @@ describe FactoryGirl::Preload do
     expect { users(:mary) }.to raise_error(%[Couldn't find :mary factory for "User" model])
   end
 
-  it "removes records" do
-    User.count.should == 1
-    FactoryGirl::Preload.clean
-    User.count.should == 0
+  it "raises error for missing clean type" do
+    FactoryGirl::Preload.clean_with = :invalid
+    expect { FactoryGirl::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
+  end
+
+  context "removes records" do
+    it "with deletion" do
+      User.count.should == 1
+      FactoryGirl::Preload.clean_with = :deletion
+      FactoryGirl::Preload.clean
+      User.count.should == 0
+    end
+
+    it "with truncation" do
+      User.count.should == 1
+      FactoryGirl::Preload.clean_with = :truncation
+      FactoryGirl::Preload.clean
+      User.count.should == 0
+    end
   end
 
   context "reloadable factories" do
