@@ -15,6 +15,7 @@ module RSpec
   class Application < ::Rails::Application
     config.root = File.dirname(__FILE__) + "/support/app"
     config.active_support.deprecation = :log
+    config.eager_load = false
     # config.active_record.logger = Logger.new(STDOUT)
   end
 end
