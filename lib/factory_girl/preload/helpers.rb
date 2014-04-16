@@ -15,7 +15,7 @@ module FactoryGirl
 
           class_eval <<-RUBY, __FILE__, __LINE__
             def #{method_name}(name)
-              factory(name, ::#{model})
+              factory(name, ::#{model.name})
             end
           RUBY
         end
