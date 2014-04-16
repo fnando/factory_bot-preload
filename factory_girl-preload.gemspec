@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "factory_girl", ">= 3.0"
   s.add_development_dependency "activerecord"
   s.add_development_dependency "actionpack"
-  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "rspec-rails", "3.0.0.beta2"
+  s.add_development_dependency "transpec"
   s.add_development_dependency "mysql2"
 end

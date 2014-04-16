@@ -6,16 +6,16 @@ describe FactoryGirl::Preload do
   it "queues preloader block" do
     block = proc {}
     FactoryGirl.preload(&block)
-    FactoryGirl::Preload.preloaders.should include(block)
+    expect(FactoryGirl::Preload.preloaders).to include(block)
   end
 
   it "should lazy load all factories, loading only when used" do
-    FactoryGirl::Preload.record_ids['User'][:john].should eq(1)
-    FactoryGirl::Preload.factories['User'][:john].should be_nil
+    expect(FactoryGirl::Preload.record_ids['User'][:john]).to eq(1)
+    expect(FactoryGirl::Preload.factories['User'][:john]).to be_nil
 
     user = users(:john)
 
-    FactoryGirl::Preload.factories['User'][:john].should eq(user)
+    expect(FactoryGirl::Preload.factories['User'][:john]).to eq(user)
   end
 
   it "injects model methods" do
@@ -23,19 +23,19 @@ describe FactoryGirl::Preload do
   end
 
   it "returns :john factory for User model" do
-    users(:john).should be_an(User)
+    expect(users(:john)).to be_an(User)
   end
 
   it "returns :ruby factory for Skill model" do
-    skills(:ruby).should be_a(Skill)
+    expect(skills(:ruby)).to be_a(Skill)
   end
 
   it "returns :my factory for Preload model" do
-    preloads(:my).should be_a(Preload)
+    expect(preloads(:my)).to be_a(Preload)
   end
 
   it "reuses existing factories" do
-    skills(:ruby).user.should == users(:john)
+    expect(skills(:ruby).user).to eq(users(:john))
   end
 
   it "raises error for missing factories" do
@@ -49,17 +49,17 @@ describe FactoryGirl::Preload do
 
   context "removes records" do
     it "with deletion" do
-      User.count.should == 1
+      expect(User.count).to eq(1)
       FactoryGirl::Preload.clean_with = :deletion
       FactoryGirl::Preload.clean
-      User.count.should == 0
+      expect(User.count).to eq(0)
     end
 
     it "with truncation" do
-      User.count.should == 1
+      expect(User.count).to eq(1)
       FactoryGirl::Preload.clean_with = :truncation
       FactoryGirl::Preload.clean
-      User.count.should == 0
+      expect(User.count).to eq(0)
     end
   end
 
@@ -75,18 +75,18 @@ describe FactoryGirl::Preload do
 
     it "freezes object" do
       users(:john).destroy
-      users(:john).should be_frozen
+      expect(users(:john)).to be_frozen
     end
 
     it "updates invitation count" do
       users(:john).increment(:invitations)
       users(:john).save
-      users(:john).invitations.should == 1
+      expect(users(:john).invitations).to eq(1)
     end
 
     it "reloads factory" do
-      users(:john).invitations.should == 0
-      users(:john).should_not be_frozen
+      expect(users(:john).invitations).to eq(0)
+      expect(users(:john)).not_to be_frozen
     end
   end
 end
