@@ -3,6 +3,8 @@ ActiveRecord::Schema.define(:version => 0) do
     drop_table :users
     drop_table :skills
     drop_table :preloads
+    drop_table :categories
+    drop_table :categories_users
   rescue Exception => e
   end
 
@@ -19,6 +21,14 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :skills do |t|
+    t.references :user
+  end
+
+  create_table :categories do |t|
+  end
+
+  create_table :categories_users, :id => false do |t|
+    t.references :category
     t.references :user
   end
 end
