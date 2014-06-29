@@ -1,8 +1,6 @@
 require "spec_helper"
 
 describe FactoryGirl::Preload do
-  include FactoryGirl::Preload::Helpers
-
   it "queues preloader block" do
     block = proc {}
     FactoryGirl.preload(&block)
@@ -88,5 +86,9 @@ describe FactoryGirl::Preload do
       expect(users(:john).invitations).to eq(0)
       expect(users(:john)).not_to be_frozen
     end
+  end
+
+  it "includes factory girl helpers" do
+    expect(self.class.included_modules).to include(FactoryGirl::Syntax::Methods)
   end
 end
