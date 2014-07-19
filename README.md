@@ -127,11 +127,11 @@ end
 
 Easy and, probably, faster!
 
-== Maintainer
+## Maintainer
 
 * Nando Vieira (http://nandovieira.com.br)
 
-== License
+## License
 
 (The MIT License)
 
