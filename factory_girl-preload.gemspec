@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 require "factory_girl/preload/version"
 
@@ -17,7 +16,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "factory_girl", ">= 3.0"
+  s.add_dependency "factory_girl", ">= 4.0"
   s.add_development_dependency "activerecord"
   s.add_development_dependency "actionpack"
   s.add_development_dependency "rspec-rails"

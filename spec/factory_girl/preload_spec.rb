@@ -45,6 +45,10 @@ describe FactoryGirl::Preload do
     expect { FactoryGirl::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
   end
 
+  example "association uses preloaded record" do
+    expect(build(:skill).user).to eq(users(:john))
+  end
+
   context "removes records" do
     it "with deletion" do
       expect(User.count).to eq(1)
@@ -90,5 +94,9 @@ describe FactoryGirl::Preload do
 
   it "includes factory girl helpers" do
     expect(self.class.included_modules).to include(FactoryGirl::Syntax::Methods)
+  end
+
+  it "includes helpers into factory girl" do
+    expect(FactoryGirl::SyntaxRunner.included_modules).to include(FactoryGirl::Preload::Helpers)
   end
 end

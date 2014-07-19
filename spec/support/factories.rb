@@ -5,7 +5,7 @@ FactoryGirl.define do
   end
 
   factory :skill do |f|
-    f.association :user
+    user { users(:john) }
   end
 
   factory :preload do |f|

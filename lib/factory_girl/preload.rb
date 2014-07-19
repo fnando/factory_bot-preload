@@ -1,10 +1,14 @@
+require "factory_girl"
+
 module FactoryGirl
   module Preload
-    autoload :Helpers, "factory_girl/preload/helpers"
-    autoload :Version, "factory_girl/preload/version"
+    require "factory_girl/preload/helpers"
+    require "factory_girl/preload/version"
 
     require "factory_girl/preload/rspec2" if defined?(RSpec)
     require "factory_girl/preload/extension"
+
+    ::FactoryGirl::SyntaxRunner.send(:include, Helpers)
 
     class << self
       attr_accessor :preloaders
