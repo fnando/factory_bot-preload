@@ -87,6 +87,26 @@ FactoryGirl.define do
 end
 ```
 
+You can also use preloaded factories on factory definitions.
+
+```ruby
+FactoryGirl.define do
+  factory :user do
+    # ...
+  end
+
+  factory :projects do
+    name "My Project"
+    user { users(:john) }
+  end
+
+  preload do
+    factory(:john) { Factory(:user) }
+    factory(:myapp) { Factory(:project, user: users(:john)) }
+  end
+end
+```
+
 Like Rails fixtures, FGP will define methods for each model. You can use it on your examples and alike.
 
 ```ruby
