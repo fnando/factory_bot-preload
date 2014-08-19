@@ -1,6 +1,8 @@
 module FactoryGirl
   module Preload
     module Helpers
+      include ::FactoryGirl::Syntax::Methods
+
       def self.extended(base)
         included(base)
       end
@@ -30,17 +32,17 @@ module FactoryGirl
       end
 
       private
+
       def factory_get(name, model)
         factory = Preload.factories[model.name][name]
+
         if factory.blank? && Preload.factories[model.name].has_key?(name)
           factory = Preload.factories[model.name][name] = model.find(Preload.record_ids[model.name][name])
         end
-        raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model" unless factory
-        factory
-      end
 
-      def create(name, attrs = {})
-        FactoryGirl.create(name, attrs)
+        raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model" unless factory
+
+        factory
       end
 
       def factory_set(name, &block)

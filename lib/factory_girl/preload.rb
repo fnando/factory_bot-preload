@@ -1,4 +1,5 @@
 require "factory_girl"
+require "active_record"
 
 module FactoryGirl
   module Preload
@@ -8,7 +9,9 @@ module FactoryGirl
     require "factory_girl/preload/rspec2" if defined?(RSpec)
     require "factory_girl/preload/extension"
 
-    ::FactoryGirl::SyntaxRunner.send(:include, Helpers)
+    ActiveSupport.on_load(:after_initialize) do
+      ::FactoryGirl::SyntaxRunner.send(:include, Helpers)
+    end
 
     class << self
       attr_accessor :preloaders
