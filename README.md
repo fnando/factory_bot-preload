@@ -81,8 +81,8 @@ FactoryGirl.define do
   end
 
   preload do
-    factory(:john) { Factory(:user) }
-    factory(:myapp) { Factory(:project, user: users(:john)) }
+    factory(:john) { create(:user) }
+    factory(:myapp) { create(:project, user: users(:john)) }
   end
 end
 ```
@@ -101,8 +101,8 @@ FactoryGirl.define do
   end
 
   preload do
-    factory(:john) { Factory(:user) }
-    factory(:myapp) { Factory(:project, user: users(:john)) }
+    factory(:john) { create(:user) }
+    factory(:myapp) { create(:project, user: users(:john)) }
   end
 end
 ```
