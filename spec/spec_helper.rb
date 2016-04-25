@@ -13,6 +13,7 @@ module RSpec
 end
 
 RSpec::Application.initialize!
+ActiveRecord::Migration.verbose = false
 load File.dirname(__FILE__) + "/support/app/db/schema.rb"
 
 require "rspec/rails"
