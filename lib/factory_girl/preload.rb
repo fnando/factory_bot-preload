@@ -50,7 +50,7 @@ module FactoryGirl
         else raise "Couldn't find #{clean_with} clean type"
       end
 
-      names = active_record.descendants.collect(&:table_name).uniq if names.empty?
+      names = active_record.descendants.select(&:table_exists?).map(&:table_name).uniq if names.empty?
 
       connection.disable_referential_integrity do
         names.each do |table|
