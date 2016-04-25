@@ -8,7 +8,6 @@ module FactoryGirl
       end
 
       initializer "factory_girl-preload" do
-
       end
     end
   end

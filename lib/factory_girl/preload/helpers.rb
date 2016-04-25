@@ -15,11 +15,9 @@ module FactoryGirl
         ActiveRecord::Base.descendants.each do |model|
           method_name = model.name.underscore.gsub("/", "_").pluralize
 
-          class_eval <<-RUBY, __FILE__, __LINE__
-            def #{method_name}(name)
-              factory(name, ::#{model.name})
-            end
-          RUBY
+          define_method(method_name) do |name|
+            factory(name, model)
+          end
         end
       end
 

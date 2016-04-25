@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   s.add_dependency "factory_girl", ">= 4.0"
   s.add_dependency "activerecord"
   s.add_development_dependency "rails"
+  s.add_development_dependency "rake"
+  s.add_development_dependency "bundler"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "mysql2"
   s.add_development_dependency "pry-meta"

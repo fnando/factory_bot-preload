@@ -8,12 +8,12 @@ describe FactoryGirl::Preload do
   end
 
   it "should lazy load all factories, loading only when used" do
-    expect(FactoryGirl::Preload.record_ids['User'][:john]).to eq(1)
-    expect(FactoryGirl::Preload.factories['User'][:john]).to be_nil
+    expect(FactoryGirl::Preload.record_ids["User"][:john]).to eq(1)
+    expect(FactoryGirl::Preload.factories["User"][:john]).to be_nil
 
     user = users(:john)
 
-    expect(FactoryGirl::Preload.factories['User'][:john]).to eq(user)
+    expect(FactoryGirl::Preload.factories["User"][:john]).to eq(user)
   end
 
   it "injects model methods" do

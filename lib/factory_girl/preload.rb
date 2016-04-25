@@ -36,7 +36,7 @@ module FactoryGirl
     def self.run
       helper = Object.new.extend(Helpers)
 
-      connection.transaction :requires_new => true do
+      connection.transaction requires_new: true do
         preloaders.each do |block|
           helper.instance_eval(&block)
         end
