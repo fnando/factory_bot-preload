@@ -1,35 +1,36 @@
-# factory_girl-preload
+# factory_bot-preload
 
-We all love Rails fixtures because they're fast, but we hate to deal with YAML/CSV/SQL files. Here enters Factory Girl (FG).
+We all love Rails fixtures because they're fast, but we hate to deal with YAML/CSV/SQL files. Here enters [factory_bot](https://rubygems.org/gems/factory_bot) (FB).
 
-Now, you can easily create records by using predefined factories. The problem is that hitting the database everytime to create records is pretty slow. And believe me, you'll feel the pain when you have lots of specs.
+Now, you can easily create records by using predefined factories. The problem is that hitting the database everytime to create records is pretty slow. And believe me, you'll feel the pain when you have lots of tests/specs.
 
-So here enters Factory Girl Preload (FGP). You can define which factories will be preloaded, so you don't have to recreate it every time (that will work for 99.37% of the time, according to statistics I just made up).
+So here enters Factory Bot Preload (FBP). You can define which factories will be preloaded, so you don't have to recreate it every time (that will work for 99.37% of the time, according to statistics I just made up).
 
 ## Installation
 
-    gem install factory_girl-preload
+    gem install factory_bot-preload
 
-## Usage
+## Intructions
 
-I'm focusing Rails 3 + RSpec 2 stack, so I can't really guarantee that it will work on other setups. Here's how you get started:
+### Installation
 
-Add both FG and FGP to your Gemfile:
+Add both FB and FBP to your Gemfile:
 
 ```ruby
 source "https://rubygems.org"
 
 gem "rails"
-gem "mysql2", "~> 0.2.7"
+gem "pg"
 
 group :test, :development do
-  gem "rspec-rails"
-  gem "factory_girl"
-  gem "factory_girl-preload"
+  gem "factory_bot"
+  gem "factory_bot-preload"
 end
 ```
 
-On `spec/spec_helper.rb` file, make sure that transactional fixtures are enabled. Here's is my file without all those RSpec comments:
+### RSpec Setup
+
+On your `spec/spec_helper.rb` file, make sure that transactional fixtures are enabled. Here's is my file without all those RSpec comments:
 
 ```ruby
 ENV["RAILS_ENV"] ||= "test"
@@ -44,10 +45,41 @@ RSpec.configure do |config|
 end
 ```
 
-Create your factories on `spec/support/factories.rb`. You may have something like this:
+### Minitest Setup
+
+On your `test/test_helper.rb` file, make sure that transaction fixtures are enabled. Here's what your file may look like:
 
 ```ruby
-FactoryGirl.define do
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
+require "rails/test_help"
+
+module ActiveSupport
+  class TestCase
+    self.use_instantiated_fixtures = true
+  end
+end
+
+# First, load factory_bot/preload.
+require "factory_bot/preload"
+
+# Then load your factories.
+Dir["./test/support/factories/**/*.rb"].each do |file|
+  require file
+end
+
+# Finally, setup minitest.
+# Your factories won't behave correctly unless you
+# call `FactoryBot::Preload.minitest` after loading them.
+FactoryBot::Preload.minitest
+```
+
+### Usage
+
+Create your factories and load it from your setup file (either `test/test_helper.rb` or `spec/spec_helper.rb`) You may have something like this:
+
+```ruby
+FactoryBot.define do
   factory :user do
     name "John Doe"
     sequence(:email) {|n| "john#{n}@example.org" }
@@ -66,7 +98,7 @@ end
 To define your preloadable factories, just use the `preload` method:
 
 ```ruby
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     name "John Doe"
     sequence(:email) {|n| "john#{n}@example.org" }
@@ -90,7 +122,7 @@ end
 You can also use preloaded factories on factory definitions.
 
 ```ruby
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     # ...
   end
@@ -107,7 +139,23 @@ FactoryGirl.define do
 end
 ```
 
-Like Rails fixtures, FGP will define methods for each model. You can use it on your examples and alike.
+Like Rails fixtures, FBP will define methods for each model. You can use it on your examples and alike.
+
+```ruby
+require "test_helper"
+
+class UserTest < ActiveSupport::TestCase
+  test "returns john's record" do
+    assert_instance_of User, users(:john)
+  end
+
+  test "returns myapp's record" do
+    assert_equal users(:john), projects(:myapp).user
+  end
+end
+```
+
+Or if you're using RSpec:
 
 ```ruby
 require "spec_helper"
@@ -125,11 +173,11 @@ describe User do
 end
 ```
 
-Easy and, probably, faster!
+That's it!
 
 ## Maintainer
 
-* Nando Vieira (http://nandovieira.com.br)
+* Nando Vieira (http://nandovieira.com)
 
 ## License
 

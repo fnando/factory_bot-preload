@@ -1,16 +1,16 @@
-require "factory_girl"
+require "factory_bot"
 require "active_record"
 
-module FactoryGirl
+module FactoryBot
   module Preload
-    require "factory_girl/preload/helpers"
-    require "factory_girl/preload/version"
-
-    require "factory_girl/preload/rspec2" if defined?(RSpec)
-    require "factory_girl/preload/extension"
+    require "factory_bot/preload/helpers"
+    require "factory_bot/preload/version"
+    require "factory_bot/preload/rspec" if defined?(RSpec)
+    require "factory_bot/preload/minitest" if defined?(Minitest)
+    require "factory_bot/preload/extension"
 
     ActiveSupport.on_load(:after_initialize) do
-      ::FactoryGirl::SyntaxRunner.send(:include, Helpers)
+      ::FactoryBot::SyntaxRunner.include ::FactoryBot::Preload::Helpers
     end
 
     class << self
@@ -45,10 +45,13 @@ module FactoryGirl
 
     def self.clean(*names)
       query = case clean_with
-        when :truncation then try_truncation_query
-        when :deletion then "DELETE FROM %s"
-        else raise "Couldn't find #{clean_with} clean type"
-      end
+              when :truncation
+                try_truncation_query
+              when :deletion
+                "DELETE FROM %s"
+              else
+                raise "Couldn't find #{clean_with} clean type"
+              end
 
       names = active_record.descendants.select(&:table_exists?).map(&:table_name).uniq if names.empty?
 
@@ -61,18 +64,20 @@ module FactoryGirl
 
     def self.reload_factories
       factories.each do |class_name, group|
-        group.each do |name, factory|
+        group.each do |name, _factory|
           factories[class_name][name] = nil
         end
       end
     end
 
-    private
     def self.try_truncation_query
       case connection.adapter_name
-        when "SQLite"     then "DELETE FROM %s"
-        when "PostgreSQL" then "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
-        else "TRUNCATE TABLE %s"
+      when "SQLite"
+        "DELETE FROM %s"
+      when "PostgreSQL"
+        "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
+      else
+        "TRUNCATE TABLE %s"
       end
     end
   end

@@ -1,4 +1,4 @@
-module FactoryGirl
+module FactoryBot
   def self.preload(&block)
     Preload.preloaders << block
   end
@@ -7,7 +7,7 @@ module FactoryGirl
     module Default
       class DSL
         def preload(&block)
-          ::FactoryGirl.preload(&block)
+          ::FactoryBot.preload(&block)
         end
       end
     end
