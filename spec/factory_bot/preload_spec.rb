@@ -1,19 +1,19 @@
 require "spec_helper"
 
-describe FactoryGirl::Preload do
+describe FactoryBot::Preload do
   it "queues preloader block" do
     block = proc {}
-    FactoryGirl.preload(&block)
-    expect(FactoryGirl::Preload.preloaders).to include(block)
+    FactoryBot.preload(&block)
+    expect(FactoryBot::Preload.preloaders).to include(block)
   end
 
   it "should lazy load all factories, loading only when used" do
-    expect(FactoryGirl::Preload.record_ids["User"][:john]).to eq(1)
-    expect(FactoryGirl::Preload.factories["User"][:john]).to be_nil
+    expect(FactoryBot::Preload.record_ids["User"][:john]).to eq(1)
+    expect(FactoryBot::Preload.factories["User"][:john]).to be_nil
 
     user = users(:john)
 
-    expect(FactoryGirl::Preload.factories["User"][:john]).to eq(user)
+    expect(FactoryBot::Preload.factories["User"][:john]).to eq(user)
   end
 
   it "injects model methods" do
@@ -41,8 +41,8 @@ describe FactoryGirl::Preload do
   end
 
   it "raises error for missing clean type" do
-    FactoryGirl::Preload.clean_with = :invalid
-    expect { FactoryGirl::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
+    FactoryBot::Preload.clean_with = :invalid
+    expect { FactoryBot::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
   end
 
   example "association uses preloaded record" do
@@ -52,27 +52,27 @@ describe FactoryGirl::Preload do
   context "removes records" do
     it "with deletion" do
       expect(User.count).to eq(1)
-      FactoryGirl::Preload.clean_with = :deletion
-      FactoryGirl::Preload.clean
+      FactoryBot::Preload.clean_with = :deletion
+      FactoryBot::Preload.clean
       expect(User.count).to eq(0)
     end
 
     it "with truncation" do
       expect(User.count).to eq(1)
-      FactoryGirl::Preload.clean_with = :truncation
-      FactoryGirl::Preload.clean
+      FactoryBot::Preload.clean_with = :truncation
+      FactoryBot::Preload.clean
       expect(User.count).to eq(0)
     end
   end
 
   context "reloadable factories" do
     before :all do
-      FactoryGirl::Preload.clean
-      FactoryGirl::Preload.run
+      FactoryBot::Preload.clean
+      FactoryBot::Preload.run
     end
 
     before :each do
-      FactoryGirl::Preload.reload_factories
+      FactoryBot::Preload.reload_factories
     end
 
     it "freezes object" do
@@ -92,11 +92,11 @@ describe FactoryGirl::Preload do
     end
   end
 
-  it "includes factory girl helpers" do
-    expect(self.class.included_modules).to include(FactoryGirl::Syntax::Methods)
+  it "includes factory_bot helpers" do
+    expect(self.class.included_modules).to include(FactoryBot::Syntax::Methods)
   end
 
-  it "includes helpers into factory girl" do
-    expect(FactoryGirl::SyntaxRunner.included_modules).to include(FactoryGirl::Preload::Helpers)
+  it "includes helpers into factory_bot" do
+    expect(FactoryBot::SyntaxRunner.included_modules).to include(FactoryBot::Preload::Helpers)
   end
 end

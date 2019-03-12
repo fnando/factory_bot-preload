@@ -1,4 +1,4 @@
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(version: 0) do
   begin
     drop_table :users
     drop_table :skills
@@ -9,12 +9,12 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   create_table :users do |t|
-    t.string :name, :null => false
-    t.string :email, :null => false
-    t.integer :invitations, :null => false, :default => 0
+    t.string :name, null: false
+    t.string :email, null: false
+    t.integer :invitations, null: false, default: 0
   end
 
-  add_index :users, :email, :unique => true
+  add_index :users, :email, unique: true
 
   create_table :preloads do |t|
     t.string :name
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(:version => 0) do
   create_table :categories do |t|
   end
 
-  create_table :categories_users, :id => false do |t|
+  create_table :categories_users, id: false do |t|
     t.references :category
     t.references :user
   end

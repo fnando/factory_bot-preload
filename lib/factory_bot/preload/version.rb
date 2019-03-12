@@ -1,9 +1,9 @@
-module FactoryGirl
+module FactoryBot
   module Preload
     module Version
-      MAJOR = 2
-      MINOR = 3
-      PATCH = 1
+      MAJOR = 0
+      MINOR = 1
+      PATCH = 0
       STRING = "#{MAJOR}.#{MINOR}.#{PATCH}"
     end
   end
