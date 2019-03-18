@@ -3,17 +3,15 @@ module FactoryBot
     module Helpers
       include ::FactoryBot::Syntax::Methods
 
-      def self.extended(base)
-        included(base)
+      def self.load_models
+        return unless defined?(Rails)
+
+        Dir[Rails.application.root.join("app/models/**/*.rb")].each do |file|
+          require_dependency file
+        end
       end
 
-      def self.included(_base)
-        if defined?(Rails)
-          Dir[Rails.application.root.join("app/models/**/*.rb")].each do |file|
-            require_dependency file
-          end
-        end
-
+      def self.define_helper_methods
         ActiveRecord::Base.descendants.each do |model|
           method_name = model.name.underscore.tr("/", "_").pluralize
 
@@ -21,6 +19,10 @@ module FactoryBot
             factory(name, model)
           end
         end
+      end
+
+      def self.included(_base)
+        FactoryBot::Preload::Helpers.define_helper_methods
       end
 
       def factory(name, model = nil, &block)

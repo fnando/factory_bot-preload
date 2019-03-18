@@ -10,6 +10,7 @@ module FactoryBot
     require "factory_bot/preload/extension"
 
     ActiveSupport.on_load(:after_initialize) do
+      ::FactoryBot::Preload::Helpers.load_models
       ::FactoryBot::SyntaxRunner.include ::FactoryBot::Preload::Helpers
     end
 
