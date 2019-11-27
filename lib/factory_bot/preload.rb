@@ -56,15 +56,18 @@ module FactoryBot
                 raise "Couldn't find #{clean_with} clean type"
               end
 
-      if names.empty?
-        names = active_record.descendants.select(&:table_exists?).map(&:table_name).uniq
-      end
+      names = active_record_names if names.empty?
 
       connection.disable_referential_integrity do
         names.each do |table|
           connection.execute(query % connection.quote_table_name(table))
         end
       end
+    end
+
+    def self.active_record_names
+      names = active_record.descendants.collect(&:table_name).uniq.compact
+      names.reject {|name| name == "schema_migrations" }
     end
 
     def self.reload_factories
