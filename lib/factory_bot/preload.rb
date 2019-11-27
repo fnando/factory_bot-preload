@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "factory_bot"
 require "active_record"
 
@@ -54,7 +56,9 @@ module FactoryBot
                 raise "Couldn't find #{clean_with} clean type"
               end
 
-      names = active_record.descendants.select(&:table_exists?).map(&:table_name).uniq if names.empty?
+      if names.empty?
+        names = active_record.descendants.select(&:table_exists?).map(&:table_name).uniq
+      end
 
       connection.disable_referential_integrity do
         names.each do |table|

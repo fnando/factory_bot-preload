@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FactoryBot
   module Preload
     module Helpers
@@ -33,9 +35,7 @@ module FactoryBot
         end
       end
 
-      private
-
-      def factory_get(name, model)
+      private def factory_get(name, model)
         factory = Preload.factories[model.name][name]
 
         if factory.blank? && Preload.factories[model.name].key?(name)
@@ -43,12 +43,14 @@ module FactoryBot
           Preload.factories[model.name][name] = factory
         end
 
-        raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model" unless factory
+        unless factory
+          raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model"
+        end
 
         factory
       end
 
-      def factory_set(name, &block)
+      private def factory_set(name, &block)
         record = instance_eval(&block)
         Preload.factories[record.class.name] ||= {}
         Preload.factories[record.class.name][name.to_sym] = record

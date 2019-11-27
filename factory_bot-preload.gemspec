@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "./lib/factory_bot/preload/version"
 
 Gem::Specification.new do |s|
@@ -7,7 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Nando Vieira"]
   s.email       = ["fnando.vieira@gmail.com"]
   s.homepage    = "http://rubygems.org/gems/factory_bot-preload"
-  s.summary     = "Preload factories (Factory Bot) just like fixtures. It will be easy and, probably, faster!"
+  s.summary     = "Preload factories (Factory Bot) just like fixtures. It will be easier and, probably, faster!"
   s.description = s.summary
 
   s.files         = `git ls-files`.split("\n")
@@ -24,5 +26,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rails"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec-rails"
-  s.add_development_dependency "sqlite3", "~> 1.3.6"
+  s.add_development_dependency "rubocop"
+  s.add_development_dependency "rubocop-fnando"
+  s.add_development_dependency "sqlite3", "~> 1.4"
 end

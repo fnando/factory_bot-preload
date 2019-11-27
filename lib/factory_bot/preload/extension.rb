@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FactoryBot
   def self.preload(&block)
     Preload.preloaders << block

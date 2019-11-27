@@ -1,12 +1,22 @@
+# frozen_string_literal: true
+
 ENV["RAILS_ENV"] = "test"
 ENV["BUNDLE_GEMFILE"] = File.dirname(__FILE__) + "/../Gemfile"
 ENV["DATABASE_URL"] = "sqlite3::memory:"
 
 require "bundler/setup"
-require "rails/all"
+
+require "rails"
+require "active_model/railtie"
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "rails/test_unit/railtie"
+
 require "minitest/utils"
 
 class SampleApplication < ::Rails::Application
+  config.api = true
   config.root = __dir__ + "/../spec/support/app"
   config.active_support.deprecation = :log
   config.eager_load = false

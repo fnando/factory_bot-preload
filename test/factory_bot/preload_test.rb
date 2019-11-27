@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "test_helper"
 
 class PreloadTest < ActiveSupport::TestCase
@@ -49,7 +51,10 @@ class PreloadTest < ActiveSupport::TestCase
 
   test "raises error for missing clean type" do
     FactoryBot::Preload.clean_with = :invalid
-    assert_raises(%[Couldn't find invalid clean type]) { FactoryBot::Preload.clean }
+
+    assert_raises(%[Couldn't find invalid clean type]) do
+      FactoryBot::Preload.clean
+    end
   end
 
   test "association uses preloaded record" do
@@ -75,7 +80,8 @@ class PreloadTest < ActiveSupport::TestCase
   end
 
   test "includes helpers into factory_bot" do
-    assert_includes FactoryBot::SyntaxRunner.included_modules, FactoryBot::Preload::Helpers
+    assert_includes FactoryBot::SyntaxRunner.included_modules,
+                    FactoryBot::Preload::Helpers
   end
 
   test "freezes object" do

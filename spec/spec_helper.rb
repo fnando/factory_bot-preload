@@ -1,9 +1,17 @@
+# frozen_string_literal: true
+
 ENV["RAILS_ENV"] = "test"
 ENV["BUNDLE_GEMFILE"] = File.dirname(__FILE__) + "/../Gemfile"
 ENV["DATABASE_URL"] = "sqlite3::memory:"
 
 require "bundler/setup"
-require "rails/all"
+
+require "rails"
+require "active_model/railtie"
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "rails/test_unit/railtie"
 
 module RSpec
   class Application < ::Rails::Application
