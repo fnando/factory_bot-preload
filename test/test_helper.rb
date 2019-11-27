@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "simplecov"
+SimpleCov.start
+
 ENV["RAILS_ENV"] = "test"
 ENV["BUNDLE_GEMFILE"] = File.dirname(__FILE__) + "/../Gemfile"
 ENV["DATABASE_URL"] = "sqlite3::memory:"
