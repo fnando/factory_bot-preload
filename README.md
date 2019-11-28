@@ -43,7 +43,13 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+# First, load factory_bot/preload.
+require "factory_bot/preload"
+
+# Then load your factories
+Dir[Rails.root.join("spec/support/factories/**/*.rb")].each do |file|
+  require file
+end
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
