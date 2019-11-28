@@ -30,13 +30,17 @@ gem "pg"
 
 group :test, :development do
   gem "factory_bot"
-  gem "factory_bot-preload"
+  gem "factory_bot-preload", require: false
 end
 ```
 
+Notice that adding `require: false` is important; otherwise you won't be able to
+run commands such as `rails db:test:prepare`.
+
 ### RSpec Setup
 
-On your `spec/spec_helper.rb` file, make sure that transactional fixtures are enabled. Here's is my file without all those RSpec comments:
+On your `spec/spec_helper.rb` file, make sure that transactional fixtures are
+enabled. Here's is my file without all those RSpec comments:
 
 ```ruby
 ENV["RAILS_ENV"] ||= "test"
@@ -59,7 +63,8 @@ end
 
 ### Minitest Setup
 
-On your `test/test_helper.rb` file, make sure that transaction fixtures are enabled. Here's what your file may look like:
+On your `test/test_helper.rb` file, make sure that transaction fixtures are
+enabled. Here's what your file may look like:
 
 ```ruby
 ENV["RAILS_ENV"] ||= "test"
@@ -88,7 +93,9 @@ FactoryBot::Preload.minitest
 
 ### Usage
 
-Create your factories and load it from your setup file (either `test/test_helper.rb` or `spec/spec_helper.rb`) You may have something like this:
+Create your factories and load it from your setup file (either
+`test/test_helper.rb` or `spec/spec_helper.rb`) You may have something like
+this:
 
 ```ruby
 FactoryBot.define do
@@ -151,7 +158,8 @@ FactoryBot.define do
 end
 ```
 
-Like Rails fixtures, FBP will define methods for each model. You can use it on your examples and alike.
+Like Rails fixtures, FBP will define methods for each model. You can use it on
+your examples and alike.
 
 ```ruby
 require "test_helper"
