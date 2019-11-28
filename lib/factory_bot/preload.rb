@@ -67,7 +67,8 @@ module FactoryBot
 
     def self.active_record_names
       names = active_record.descendants.collect(&:table_name).uniq.compact
-      names.reject {|name| name == "schema_migrations" }
+      reserved_tables = %w[ar_internal_metadata schema_migrations]
+      names.reject {|name| reserved_tables.include?(name) }
     end
 
     def self.reload_factories
