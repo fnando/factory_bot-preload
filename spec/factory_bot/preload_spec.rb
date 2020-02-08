@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe FactoryBot::Preload do
   it "queues preloader block" do
-    block = proc {}
+    block = proc { }
     FactoryBot.preload(&block)
     expect(FactoryBot::Preload.preloaders).to include(block)
   end
@@ -43,6 +45,18 @@ describe FactoryBot::Preload do
   it "raises error for missing clean type" do
     FactoryBot::Preload.clean_with = :invalid
     expect { FactoryBot::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
+  end
+
+  it "ignores reserved table names when creating helpers" do
+    mod = Module.new do
+      include FactoryBot::Preload::Helpers
+    end
+
+    instance = Object.new.extend(mod)
+
+    expect(instance).not_to respond_to(:active_record_internal_metadata)
+    expect(instance).not_to respond_to(:active_record_schema_migrations)
+    expect(instance).not_to respond_to(:primary_schema_migrations)
   end
 
   example "association uses preloaded record" do

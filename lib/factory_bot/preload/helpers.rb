@@ -15,9 +15,11 @@ module FactoryBot
 
       def self.define_helper_methods
         ActiveRecord::Base.descendants.each do |model|
-          method_name = model.name.underscore.tr("/", "_").pluralize
+          next if FactoryBot::Preload.reserved_tables.include?(model.table_name)
 
-          define_method(method_name) do |name|
+          helper_name = model.name.underscore.tr("/", "_").pluralize
+
+          define_method(helper_name) do |name|
             factory(name, model)
           end
         end

@@ -5,6 +5,23 @@ require "active_record"
 
 module FactoryBot
   module Preload
+    class << self
+      attr_accessor :preloaders
+      attr_accessor :factories
+      attr_accessor :record_ids
+      attr_accessor :clean_with
+      attr_accessor :reserved_tables
+    end
+
+    self.preloaders = []
+    self.factories = {}
+    self.record_ids = {}
+    self.clean_with = :truncation
+    self.reserved_tables = %w[
+      ar_internal_metadata
+      schema_migrations
+    ]
+
     require "factory_bot/preload/helpers"
     require "factory_bot/preload/version"
     require "factory_bot/preload/rspec" if defined?(RSpec)
@@ -15,18 +32,6 @@ module FactoryBot
       ::FactoryBot::Preload::Helpers.load_models
       ::FactoryBot::SyntaxRunner.include ::FactoryBot::Preload::Helpers
     end
-
-    class << self
-      attr_accessor :preloaders
-      attr_accessor :factories
-      attr_accessor :record_ids
-      attr_accessor :clean_with
-    end
-
-    self.preloaders = []
-    self.factories = {}
-    self.record_ids = {}
-    self.clean_with = :truncation
 
     def self.active_record
       ActiveRecord::Base
@@ -67,7 +72,7 @@ module FactoryBot
 
     def self.active_record_names
       names = active_record.descendants.collect(&:table_name).uniq.compact
-      reserved_tables = %w[ar_internal_metadata schema_migrations]
+
       names.reject {|name| reserved_tables.include?(name) }
     end
 

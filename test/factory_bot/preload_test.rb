@@ -100,4 +100,16 @@ class PreloadTest < ActiveSupport::TestCase
     assert_equal 0, users(:john).invitations
     refute users(:john).frozen?
   end
+
+  test "ignores reserved table names" do
+    mod = Module.new do
+      include FactoryBot::Preload::Helpers
+    end
+
+    instance = Object.new.extend(mod)
+
+    refute_respond_to instance, :active_record_internal_metadata
+    refute_respond_to instance, :active_record_schema_migrations
+    refute_respond_to instance, :primary_schema_migrations
+  end
 end
