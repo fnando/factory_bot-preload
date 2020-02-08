@@ -5,6 +5,7 @@ require "test_helper"
 class PreloadTest < ActiveSupport::TestCase
   setup do
     FactoryBot::Preload.clean_with = :truncation
+    FactoryBot::Preload.helper_name = FactoryBot::Preload.default_helper_name
   end
 
   test "queues preloader block" do
@@ -111,5 +112,20 @@ class PreloadTest < ActiveSupport::TestCase
     refute_respond_to instance, :active_record_internal_metadata
     refute_respond_to instance, :active_record_schema_migrations
     refute_respond_to instance, :primary_schema_migrations
+  end
+
+  test "processes helper name" do
+    FactoryBot::Preload.helper_name = lambda do |_class_name, helper_name|
+      helper_name.gsub(/^models_/, "")
+    end
+
+    mod = Module.new do
+      include FactoryBot::Preload::Helpers
+    end
+
+    instance = Object.new.extend(mod)
+
+    assert_respond_to instance, :assets
+    assert_equal "Some asset", assets(:asset).name
   end
 end

@@ -10,6 +10,8 @@ module FactoryBot
       attr_accessor :factories
       attr_accessor :record_ids
       attr_accessor :clean_with
+      attr_accessor :default_helper_name
+      attr_accessor :helper_name
       attr_accessor :reserved_tables
     end
 
@@ -17,6 +19,8 @@ module FactoryBot
     self.factories = {}
     self.record_ids = {}
     self.clean_with = :truncation
+    self.default_helper_name = ->(_class_name, helper_name) { helper_name }
+    self.helper_name = default_helper_name
     self.reserved_tables = %w[
       ar_internal_metadata
       schema_migrations

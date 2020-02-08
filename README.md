@@ -61,6 +61,17 @@ RSpec.configure do |config|
 end
 ```
 
+You may want to configure the generated helper names. For instance, imagine you
+have a namespace like `MyApp::Models::User`. That'd generate a helper method
+like `myapp_models_user`. If you don't have conflicting names, you can strip
+`myapp_models_` like this:
+
+```ruby
+FactoryBot::Preload.helper_name = lambda do |class_name, helper_name|
+  helper_name.gsub(/^myapp_models_/, "")
+end
+```
+
 ### Minitest Setup
 
 On your `test/test_helper.rb` file, make sure that transaction fixtures are

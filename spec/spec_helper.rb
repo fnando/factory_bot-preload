@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require "simplecov"
-SimpleCov.start
+SimpleCov.start do
+  add_filter(/schema\.rb/)
+end
 
 ENV["RAILS_ENV"] = "test"
 ENV["BUNDLE_GEMFILE"] = File.dirname(__FILE__) + "/../Gemfile"

@@ -7,7 +7,8 @@ ActiveRecord::Schema.define(version: 0) do
     drop_table :preloads
     drop_table :categories
     drop_table :categories_users
-  rescue Exception => e
+    drop_table :assets
+  rescue Exception => error
   end
 
   create_table :users do |t|
@@ -32,5 +33,9 @@ ActiveRecord::Schema.define(version: 0) do
   create_table :categories_users, id: false do |t|
     t.references :category
     t.references :user
+  end
+
+  create_table :assets do |t|
+    t.string :name
   end
 end

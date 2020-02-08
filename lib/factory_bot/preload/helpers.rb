@@ -19,6 +19,11 @@ module FactoryBot
 
           helper_name = model.name.underscore.tr("/", "_").pluralize
 
+          helper_name = FactoryBot::Preload.helper_name.call(
+            model.name,
+            helper_name
+          )
+
           define_method(helper_name) do |name|
             factory(name, model)
           end

@@ -59,6 +59,21 @@ describe FactoryBot::Preload do
     expect(instance).not_to respond_to(:primary_schema_migrations)
   end
 
+  it "processes helper name" do
+    FactoryBot::Preload.helper_name = lambda do |_class_name, helper_name|
+      helper_name.gsub(/^models_/, "")
+    end
+
+    mod = Module.new do
+      include FactoryBot::Preload::Helpers
+    end
+
+    instance = Object.new.extend(mod)
+
+    expect(instance).to respond_to(:assets)
+    expect(assets(:asset).name).to eq("Some asset")
+  end
+
   example "association uses preloaded record" do
     expect(build(:skill).user).to eq(users(:john))
   end
