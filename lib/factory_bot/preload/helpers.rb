@@ -25,7 +25,7 @@ module FactoryBot
           )
 
           define_method(helper_name) do |name|
-            factory(name, model)
+            fixture(name, model)
           end
         end
       end
@@ -34,30 +34,31 @@ module FactoryBot
         FactoryBot::Preload::Helpers.define_helper_methods
       end
 
-      def factory(name, model = nil, &block)
+      def fixture(name, model = nil, &block)
         if block_given?
-          factory_set(name, &block)
+          fixture_set(name, &block)
         else
-          factory_get(name, model)
+          fixture_get(name, model)
         end
       end
+      alias :factory :fixture
 
-      private def factory_get(name, model)
-        factory = Preload.factories[model.name][name]
+      private def fixture_get(name, model)
+        fixture = Preload.factories[model.name][name]
 
-        if factory.blank? && Preload.factories[model.name].key?(name)
-          factory = model.find(Preload.record_ids[model.name][name])
-          Preload.factories[model.name][name] = factory
+        if fixture.blank? && Preload.factories[model.name].key?(name)
+          fixture = model.find(Preload.record_ids[model.name][name])
+          Preload.factories[model.name][name] = fixture
         end
 
-        unless factory
+        unless fixture
           raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model"
         end
 
-        factory
+        fixture
       end
 
-      private def factory_set(name, &block)
+      private def fixture_set(name, &block)
         record = instance_eval(&block).freeze
         Preload.factories[record.class.name] ||= {}
         Preload.factories[record.class.name][name.to_sym] = record
