@@ -58,7 +58,7 @@ module FactoryBot
       end
 
       private def factory_set(name, &block)
-        record = instance_eval(&block)
+        record = instance_eval(&block).freeze
         Preload.factories[record.class.name] ||= {}
         Preload.factories[record.class.name][name.to_sym] = record
 
