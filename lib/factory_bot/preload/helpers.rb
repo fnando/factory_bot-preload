@@ -64,6 +64,7 @@ module FactoryBot
 
         Preload.record_ids[record.class.name] ||= {}
         Preload.record_ids[record.class.name][name.to_sym] = record.id
+        record
       end
     end
   end
