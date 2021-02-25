@@ -1,6 +1,27 @@
----
 inherit_gem:
-  rubocop-fnando: .rubocop.yml
+  rubocop-gp:
+    - ./config/default.yml
 
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.5
+
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+  EnforcedStyle: no_empty_lines
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+  EnforcedStyle: no_empty_lines
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Gp/ClassOrModuleDeclaredInWrongFile:
+  Enabled: false
+
+Gp/ModuleMethodInWrongFile:
+  Enabled: false
+
+Rails/ApplicationRecord:
+  Enabled: false

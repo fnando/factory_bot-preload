@@ -55,11 +55,11 @@ module FactoryBot
       query =
         case connection.adapter_name
         when "SQLite"
-          tables.map { |table| "DELETE FROM %s" % connection.quote_table_name(table) }.join(';')
+          tables.map { |table| "DELETE FROM #{connection.quote_table_name(table)}" }.join(";")
         when "PostgreSQL"
-          "TRUNCATE TABLE #{tables.map { |table| connection.quote_table_name(table)}.join(',') } RESTART IDENTITY CASCADE"
+          "TRUNCATE TABLE #{tables.map { |table| connection.quote_table_name(table) }.join(',')} RESTART IDENTITY CASCADE"
         else
-          "TRUNCATE TABLE #{tables.map { |table| connection.quote_table_name(table)}.join(',') }"
+          "TRUNCATE TABLE #{tables.map { |table| connection.quote_table_name(table) }.join(',')}"
         end
 
       connection.disable_referential_integrity do
@@ -70,12 +70,11 @@ module FactoryBot
     def self.active_record_names
       names = active_record.descendants.collect(&:table_name).uniq.compact
 
-      names.reject {|name| reserved_tables.include?(name) }
+      names.reject { |name| reserved_tables.include?(name) }
     end
 
     def self.reload_factories
       self.fixtures_per_test = {}
     end
-
   end
 end

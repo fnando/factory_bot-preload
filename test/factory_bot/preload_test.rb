@@ -3,9 +3,8 @@
 require "test_helper"
 
 class PreloadTest < ActiveSupport::TestCase
-
   test "queues preloader block" do
-    block = proc { }
+    block = proc {}
     FactoryBot.preload(&block)
     assert_includes FactoryBot::Preload.preloaders, block
   end
@@ -18,7 +17,7 @@ class PreloadTest < ActiveSupport::TestCase
     user.email = "super@gmail.com"
 
     assert_equal users(:john).object_id, user.object_id
-    refute_nil FactoryBot::Preload.fixtures_per_test["User-john"]
+    assert_not_nil FactoryBot::Preload.fixtures_per_test["User-john"]
   end
 
   test "injects model methods" do
@@ -43,7 +42,7 @@ class PreloadTest < ActiveSupport::TestCase
   end
 
   test "raises error for missing factories" do
-    assert_raises(%[Couldn't find :mary factory for "User" model]) do
+    assert_raises(%(Couldn't find :mary factory for "User" model)) do
       users(:mary)
     end
   end
@@ -81,19 +80,19 @@ class PreloadTest < ActiveSupport::TestCase
 
   test "reloads factory" do
     assert_equal 0, users(:john).invitations
-    refute users(:john).frozen?
+    assert_not users(:john).frozen?
   end
 
   test "ignores reserved table names" do
-    mod = Module.new do
-      include FactoryBot::Preload::Helpers
-    end
+    mod =
+      Module.new do
+        include FactoryBot::Preload::Helpers
+      end
 
     instance = Object.new.extend(mod)
 
-    refute_respond_to instance, :active_record_internal_metadata
-    refute_respond_to instance, :active_record_schema_migrations
-    refute_respond_to instance, :primary_schema_migrations
+    assert_not_respond_to instance, :active_record_internal_metadata
+    assert_not_respond_to instance, :active_record_schema_migrations
+    assert_not_respond_to instance, :primary_schema_migrations
   end
-
 end

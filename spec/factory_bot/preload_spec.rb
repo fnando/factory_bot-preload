@@ -4,24 +4,24 @@ require "spec_helper"
 
 describe FactoryBot::Preload do
   it "queues preloader block" do
-    block = proc { }
+    block = proc {}
     FactoryBot.preload(&block)
-    expect(FactoryBot::Preload.preloaders).to include(block)
+    expect(described_class.preloaders).to include(block)
   end
 
-  it "should lazy load all factories, loading only when used" do
-    expect(FactoryBot::Preload.record_ids["User"][:john]).to eq(1)
-    expect(FactoryBot::Preload.fixtures_per_test["User-john"]).to be_nil
+  it "lazies load all factories, loading only when used" do
+    expect(described_class.record_ids["User"][:john]).to eq(1)
+    expect(described_class.fixtures_per_test["User-john"]).to be_nil
 
     user = users(:john)
     user.email = "super@gmail.com"
 
     expect(users(:john).object_id).to eq(user.object_id)
-    expect(FactoryBot::Preload.fixtures_per_test["User-john"]).not_to be_nil
+    expect(described_class.fixtures_per_test["User-john"]).not_to be_nil
   end
 
   it "injects model methods" do
-    expect { users(:john) }.to_not raise_error
+    expect { users(:john) }.not_to raise_error
   end
 
   it "returns :john factory for User model" do
@@ -41,13 +41,14 @@ describe FactoryBot::Preload do
   end
 
   it "raises error for missing factories" do
-    expect { users(:mary) }.to raise_error(%[Couldn't find :mary fixture for "User" model])
+    expect { users(:mary) }.to raise_error(%(Couldn't find :mary fixture for "User" model))
   end
 
   it "ignores reserved table names when creating helpers" do
-    mod = Module.new do
-      include FactoryBot::Preload::Helpers
-    end
+    mod =
+      Module.new do
+        include FactoryBot::Preload::Helpers
+      end
 
     instance = Object.new.extend(mod)
 
@@ -62,18 +63,18 @@ describe FactoryBot::Preload do
 
   it "removes records with truncation" do
     expect(User.count).to eq(1)
-    FactoryBot::Preload.clean
+    described_class.clean
     expect(User.count).to eq(0)
   end
 
   context "reloadable factories" do
     before :all do
-      FactoryBot::Preload.clean
-      FactoryBot::Preload.run
+      described_class.clean
+      described_class.run
     end
 
     before :each do
-      FactoryBot::Preload.reload_factories
+      described_class.reload_factories
     end
 
     it "freezes object" do
