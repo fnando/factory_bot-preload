@@ -12,12 +12,6 @@ Now, you can easily create records by using predefined factories. The problem is
 
 So here enters Factory Bot Preload (FBP). You can define which factories will be preloaded, so you don't have to recreate it every time (that will work for 99.37% of the time, according to statistics I just made up).
 
-## Installation
-
-    gem install factory_bot-preload
-
-## Intructions
-
 ### Installation
 
 Add both FB and FBP to your Gemfile:
@@ -26,11 +20,10 @@ Add both FB and FBP to your Gemfile:
 source "https://rubygems.org"
 
 gem "rails"
-gem "pg"
 
 group :test, :development do
   gem "factory_bot"
-  gem "factory_bot-preload", require: false
+  gem "factory_bot-preload", require: false, github: 'corp-gp/factory_bot-preload'
 end
 ```
 
@@ -58,17 +51,6 @@ end
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.mock_with :rspec
-end
-```
-
-You may want to configure the generated helper names. For instance, imagine you
-have a namespace like `MyApp::Models::User`. That'd generate a helper method
-like `myapp_models_user`. If you don't have conflicting names, you can strip
-`myapp_models_` like this:
-
-```ruby
-FactoryBot::Preload.helper_name = lambda do |class_name, helper_name|
-  helper_name.gsub(/^myapp_models_/, "")
 end
 ```
 
@@ -143,8 +125,8 @@ FactoryBot.define do
   end
 
   preload do
-    factory(:john) { create(:user) }
-    factory(:myapp) { create(:project, user: users(:john)) }
+    fixture(:john) { create(:user) }
+    fixture(:myapp) { create(:project, user: users(:john)) }
   end
 end
 ```
@@ -163,11 +145,48 @@ FactoryBot.define do
   end
 
   preload do
-    factory(:john) { create(:user) }
-    factory(:myapp) { create(:project, user: users(:john)) }
+    fixture(:john) { create(:user) }
+    fixture(:myapp) { create(:project, user: users(:john)) }
   end
 end
 ```
+
+
+If you need to create records with specifying id, use `fixture_stub_const`, it stub const in model to next value from generated primary key
+
+```ruby
+class User
+  ADMIN_ID = 10
+
+  def can_edit_article?
+    id == ADMIN_ID
+  end
+end
+```
+
+```ruby
+FactoryBot.define do
+  factory :user do
+    # ...
+  end
+
+  preload do
+    fixture(:john) { create(:user) }
+    fixture_stub_const(:admin, :ADMIN_ID) { create(:user) }
+  end
+end
+```
+
+```ruby
+describe User do
+  let(:admin) { users(:admin) }
+
+  it "admin can edit article" do
+    expect(admin).to be_can_edit_article
+  end
+end
+````
+
 
 Like Rails fixtures, FBP will define methods for each model. You can use it on
 your examples and alike.
