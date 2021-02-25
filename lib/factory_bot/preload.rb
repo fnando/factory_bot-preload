@@ -34,11 +34,11 @@ module FactoryBot
 
     ActiveSupport.on_load(:after_initialize) do
       ::FactoryBot::Preload::Helpers.load_models
-      ::FactoryBot::SyntaxRunner.include ::FactoryBot::Preload::Helpers
+      ::FactoryBot::SyntaxRunner.include(::FactoryBot::Preload::Helpers)
     end
 
     def self.active_record
-      ActiveRecord::Base
+      ::ActiveRecord::Base
     end
 
     def self.connection
@@ -55,22 +55,21 @@ module FactoryBot
       end
     end
 
-    def self.clean(*names)
-      query = case clean_with
-              when :truncation
-                try_truncation_query
-              when :deletion
-                "DELETE FROM %s"
-              else
-                raise "Couldn't find #{clean_with} clean type"
-              end
+    def self.clean(*tables)
+      tables = active_record_names if tables.empty?
 
-      names = active_record_names if names.empty?
+      query =
+        case connection.adapter_name
+        when "SQLite"
+          tables.map { |table| "DELETE FROM %s" % connection.quote_table_name(table) }.join(';')
+        when "PostgreSQL"
+          "TRUNCATE TABLE #{tables.map { |table| connection.quote_table_name(table)}.join(',') } RESTART IDENTITY CASCADE"
+        else
+          "TRUNCATE TABLE #{tables.map { |table| connection.quote_table_name(table)}.join(',') }"
+        end
 
       connection.disable_referential_integrity do
-        names.each do |table|
-          connection.execute(query % connection.quote_table_name(table))
-        end
+        connection.execute(query)
       end
     end
 
@@ -81,22 +80,8 @@ module FactoryBot
     end
 
     def self.reload_factories
-      factories.each do |class_name, group|
-        group.each do |name, _factory|
-          factories[class_name][name] = nil
-        end
-      end
+      self.fixtures_per_test = {}
     end
 
-    def self.try_truncation_query
-      case connection.adapter_name
-      when "SQLite"
-        "DELETE FROM %s"
-      when "PostgreSQL"
-        "TRUNCATE TABLE %s RESTART IDENTITY CASCADE"
-      else
-        "TRUNCATE TABLE %s"
-      end
-    end
   end
 end
