@@ -11,11 +11,13 @@ describe FactoryBot::Preload do
 
   it "should lazy load all factories, loading only when used" do
     expect(FactoryBot::Preload.record_ids["User"][:john]).to eq(1)
-    expect(FactoryBot::Preload.factories["User"][:john]).to be_nil
+    expect(FactoryBot::Preload.fixtures_per_test["User-john"]).to be_nil
 
     user = users(:john)
+    user.email = "super@gmail.com"
 
-    expect(FactoryBot::Preload.factories["User"][:john]).to eq(user)
+    expect(users(:john).object_id).to eq(user.object_id)
+    expect(FactoryBot::Preload.fixtures_per_test["User-john"]).not_to be_nil
   end
 
   it "injects model methods" do
@@ -39,12 +41,7 @@ describe FactoryBot::Preload do
   end
 
   it "raises error for missing factories" do
-    expect { users(:mary) }.to raise_error(%[Couldn't find :mary factory for "User" model])
-  end
-
-  it "raises error for missing clean type" do
-    FactoryBot::Preload.clean_with = :invalid
-    expect { FactoryBot::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
+    expect { users(:mary) }.to raise_error(%[Couldn't find :mary fixture for "User" model])
   end
 
   it "ignores reserved table names when creating helpers" do
@@ -59,39 +56,14 @@ describe FactoryBot::Preload do
     expect(instance).not_to respond_to(:primary_schema_migrations)
   end
 
-  it "processes helper name" do
-    FactoryBot::Preload.helper_name = lambda do |_class_name, helper_name|
-      helper_name.gsub(/^models_/, "")
-    end
-
-    mod = Module.new do
-      include FactoryBot::Preload::Helpers
-    end
-
-    instance = Object.new.extend(mod)
-
-    expect(instance).to respond_to(:assets)
-    expect(assets(:asset).name).to eq("Some asset")
-  end
-
   example "association uses preloaded record" do
     expect(build(:skill).user).to eq(users(:john))
   end
 
-  context "removes records" do
-    it "with deletion" do
-      expect(User.count).to eq(1)
-      FactoryBot::Preload.clean_with = :deletion
-      FactoryBot::Preload.clean
-      expect(User.count).to eq(0)
-    end
-
-    it "with truncation" do
-      expect(User.count).to eq(1)
-      FactoryBot::Preload.clean_with = :truncation
-      FactoryBot::Preload.clean
-      expect(User.count).to eq(0)
-    end
+  it "removes records with truncation" do
+    expect(User.count).to eq(1)
+    FactoryBot::Preload.clean
+    expect(User.count).to eq(0)
   end
 
   context "reloadable factories" do

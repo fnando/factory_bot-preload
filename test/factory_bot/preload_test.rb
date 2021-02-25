@@ -3,10 +3,6 @@
 require "test_helper"
 
 class PreloadTest < ActiveSupport::TestCase
-  setup do
-    FactoryBot::Preload.clean_with = :truncation
-    FactoryBot::Preload.helper_name = FactoryBot::Preload.default_helper_name
-  end
 
   test "queues preloader block" do
     block = proc { }
@@ -15,12 +11,14 @@ class PreloadTest < ActiveSupport::TestCase
   end
 
   test "lazy load all factories, loading only when used" do
-    assert_equal 1, FactoryBot::Preload.record_ids["User"][:john]
-    assert_nil FactoryBot::Preload.factories["User"][:john]
+    assert_equal FactoryBot::Preload.record_ids["User"][:john], 1
+    assert_nil FactoryBot::Preload.fixtures_per_test["User-john"]
 
     user = users(:john)
+    user.email = "super@gmail.com"
 
-    assert_equal user, FactoryBot::Preload.factories["User"][:john]
+    assert_equal users(:john).object_id, user.object_id
+    refute_nil FactoryBot::Preload.fixtures_per_test["User-john"]
   end
 
   test "injects model methods" do
@@ -50,28 +48,12 @@ class PreloadTest < ActiveSupport::TestCase
     end
   end
 
-  test "raises error for missing clean type" do
-    FactoryBot::Preload.clean_with = :invalid
-
-    assert_raises(%[Couldn't find invalid clean type]) do
-      FactoryBot::Preload.clean
-    end
-  end
-
   test "association uses preloaded record" do
     assert_equal users(:john), build(:skill).user
   end
 
-  test "removes records with :deletion" do
-    assert_equal 1, User.count
-    FactoryBot::Preload.clean_with = :deletion
-    FactoryBot::Preload.clean
-    assert_equal 0, User.count
-  end
-
   test "removes records with :truncation" do
     assert_equal 1, User.count
-    FactoryBot::Preload.clean_with = :truncation
     FactoryBot::Preload.clean
     assert_equal 0, User.count
   end
@@ -114,18 +96,4 @@ class PreloadTest < ActiveSupport::TestCase
     refute_respond_to instance, :primary_schema_migrations
   end
 
-  test "processes helper name" do
-    FactoryBot::Preload.helper_name = lambda do |_class_name, helper_name|
-      helper_name.gsub(/^models_/, "")
-    end
-
-    mod = Module.new do
-      include FactoryBot::Preload::Helpers
-    end
-
-    instance = Object.new.extend(mod)
-
-    assert_respond_to instance, :assets
-    assert_equal "Some asset", assets(:asset).name
-  end
 end

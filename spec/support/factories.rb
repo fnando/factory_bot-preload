@@ -21,9 +21,9 @@ FactoryBot.define do
   end
 
   preload do
-    factory(:john) { create(:user) }
-    factory(:ruby) { create(:skill, user: users(:john)) }
-    factory(:my)   { create(:preload) }
-    factory(:asset) { create(:asset) }
+    fixture(:john) { create(:user) }
+    fixture(:ruby) { create(:skill, user: users(:john)) }
+    fixture(:my)   { create(:preload) }
+    fixture(:asset) { create(:asset) }
   end
 end

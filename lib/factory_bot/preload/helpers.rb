@@ -15,23 +15,16 @@ module FactoryBot
 
       def self.define_helper_methods
         ActiveRecord::Base.descendants.each do |model|
-          next if FactoryBot::Preload.reserved_tables.include?(model.table_name)
+          next if ::FactoryBot::Preload.reserved_tables.include?(model.table_name)
 
-          helper_name = model.name.underscore.tr("/", "_").pluralize
-
-          helper_name = FactoryBot::Preload.helper_name.call(
-            model.name,
-            helper_name
-          )
-
-          define_method(helper_name) do |name|
-            fixture(name, model)
+          define_method(model.name.tableize) do |name|
+            fixture_get(name, model)
           end
         end
       end
 
       def self.included(_base)
-        FactoryBot::Preload::Helpers.define_helper_methods
+        ::FactoryBot::Preload::Helpers.define_helper_methods
       end
 
       def fixture(name, model = nil, &block)
