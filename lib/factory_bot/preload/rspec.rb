@@ -10,8 +10,4 @@ RSpec.configure do |config|
     ::FactoryBot::Preload.clean
     ::FactoryBot::Preload.run
   end
-
-  config.before(:each) do
-    ::FactoryBot::Preload.reload_factories
-  end
 end

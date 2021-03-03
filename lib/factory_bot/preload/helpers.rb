@@ -48,13 +48,8 @@ module FactoryBot
       end
 
       private def fixture_get(name, model)
-        per_test_key = "#{model.name}-#{name}"
-        fixture = Preload.fixtures_per_test[per_test_key]
-
-        if fixture
-          fixture
-        elsif (record_id = Preload.record_ids[model.name][name])
-          Preload.fixtures_per_test[per_test_key] = model.find(record_id)
+        if (record_id = Preload.record_ids.dig(model.name, name))
+          model.find(record_id)
         else
           raise "Couldn't find #{name.inspect} fixture for #{model.name.inspect} model"
         end
