@@ -5,21 +5,18 @@ module FactoryBot
     module Helpers
       include ::FactoryBot::Syntax::Methods
 
-      def self.load_models
-        return unless defined?(Rails)
-
-        Dir[Rails.application.root.join("app/models/**/*.rb")].each do |file|
-          require_dependency file
-        end
-      end
-
       def self.define_helper_methods
-        ActiveRecord::Base.descendants.each do |model|
-          next if ::FactoryBot::Preload.reserved_tables.include?(model.table_name)
+        ActiveRecord::Base.connection.tables.each do |table|
+          next if ::FactoryBot::Preload.reserved_tables.include?(table)
 
-          define_method(model.name.tableize) do |name|
-            fixture_get(name, model)
-          end
+          module_eval <<-RUBY, __FILE__, __LINE__ + 1
+            # def users(name)
+            #   fixture_get(name, User)
+            # end
+            def #{table}(name)
+              fixture_get(name, #{table.classify})
+            end
+          RUBY
         end
       end
 
@@ -35,15 +32,10 @@ module FactoryBot
         record
       end
 
-      def fixture_stub_const(name, const_name, &block)
+      def fixture_with_id(name, &block)
         record = fixture(name, &block)
-        model = record.class
-        if model.const_defined?(const_name)
-          model.send(:remove_const, const_name)
-          model.const_set(const_name, record.id)
-        else
-          raise ArgumentError, "#{model.name}::#{const_name} is not defined"
-        end
+        prev_id = Preload.maximise_sequence_names[record.class.sequence_name]
+        Preload.maximise_sequence_names[record.class.sequence_name] = [record.id, prev_id || 1].max
         record
       end
 
