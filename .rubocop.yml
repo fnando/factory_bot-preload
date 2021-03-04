@@ -25,3 +25,6 @@ Gp/ModuleMethodInWrongFile:
 
 Rails/ApplicationRecord:
   Enabled: false
+
+Gp/PotentialSqlInjection:
+  Enabled: false

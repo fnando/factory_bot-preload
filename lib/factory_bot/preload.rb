@@ -6,24 +6,9 @@ require "active_record"
 module FactoryBot
   module Preload
 
-    class << self
-      attr_accessor(
-        :preloaders,
-        :record_ids,
-        :maximise_sequence_names,
-        :reserved_tables,
-      )
-    end
-
-    self.preloaders = []
-    self.record_ids = {}
-    self.maximise_sequence_names = {}
-    self.reserved_tables = %w[
-      ar_internal_metadata
-      schema_migrations
-    ]
-
     require "factory_bot/preload/helpers"
+    require "factory_bot/preload/fixture_creator"
+    require "factory_bot/preload/table_loader"
     require "factory_bot/preload/version"
     require "factory_bot/preload/rspec" if defined?(RSpec)
     require "factory_bot/preload/minitest" if defined?(Minitest)
@@ -41,15 +26,14 @@ module FactoryBot
         clean_db
         load_models
         define_fixture_helpers
-        load_fixtures_to_db
-        update_sequences
+        FactoryBot::Preload::FixtureCreator.load_to_db
 
-        File.binwrite(DUMP_RECORDS_PATH, Marshal.dump(FactoryBot::Preload.record_ids))
+        File.binwrite(DUMP_RECORDS_PATH, Marshal.dump(FactoryBot::Preload::FixtureCreator.record_ids))
         File.write(FACTORIES_CHECKSUM_PATH, new_fixtures_checksum)
       else
         puts "Cache load fixtures".yellow
 
-        FactoryBot::Preload.record_ids = Marshal.load(File.binread(DUMP_RECORDS_PATH))
+        FactoryBot::Preload::FixtureCreator.record_ids = Marshal.load(File.binread(DUMP_RECORDS_PATH))
         define_fixture_helpers
       end
     end
@@ -82,18 +66,13 @@ module FactoryBot
       ::FactoryBot::SyntaxRunner.include(::FactoryBot::Preload::Helpers)
     end
 
-    def load_fixtures_to_db
-      helper = Object.new.extend(Helpers)
+    RESERVED_TABLES = %w[
+      ar_internal_metadata
+      schema_migrations
+    ].freeze
 
-      connection.transaction requires_new: true do
-        preloaders.each do |block|
-          helper.instance_eval(&block)
-        end
-      end
-    end
-
-    def clean_db(*tables)
-      tables = active_record_names if tables.empty?
+    def clean_db
+      tables = connection.tables - RESERVED_TABLES
 
       query =
         case connection.adapter_name
@@ -110,25 +89,8 @@ module FactoryBot
       end
     end
 
-    def update_sequences
-      update_sequences =
-        Preload.maximise_sequence_names.map { |seq, id|
-          "setval('#{seq}', GREATEST(#{id}, nextval('#{seq}')))"
-        }.join(",")
-
-      connection.execute("SELECT #{update_sequences}") unless update_sequences.empty?
-    end
-
-    def active_record_names
-      connection.tables - reserved_tables
-    end
-
-    def active_record
-      ::ActiveRecord::Base
-    end
-
     def connection
-      active_record.connection
+      ::ActiveRecord::Base.connection
     end
   end
 end
