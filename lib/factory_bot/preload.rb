@@ -14,13 +14,12 @@ module FactoryBot
     require "factory_bot/preload/minitest" if defined?(Minitest)
     require "factory_bot/preload/extension"
 
-    FACTORIES_CHECKSUM_PATH = Rails.root.join("tmp/factories_checksum")
     DUMP_RECORDS_PATH = Rails.root.join("tmp/fixture_records_dump")
 
     module_function
 
     def run
-      if (new_fixtures_checksum = modified_fixtures?)
+      if max_mtime_fixtures > cached_mtime_fixtures
         puts "Full load fixtures".yellow
 
         clean_db
@@ -29,7 +28,7 @@ module FactoryBot
         FactoryBot::Preload::FixtureCreator.load_to_db
 
         File.binwrite(DUMP_RECORDS_PATH, Marshal.dump(FactoryBot::Preload::FixtureCreator.record_ids))
-        File.write(FACTORIES_CHECKSUM_PATH, new_fixtures_checksum)
+        caching_max_mtime_fixtures
       else
         puts "Cache load fixtures".yellow
 
@@ -38,20 +37,29 @@ module FactoryBot
       end
     end
 
-    def modified_fixtures?
-      fixtures_checksum = +""
-      FactoryBot.definition_file_paths.each do |path|
-        directory_path = File.expand_path(path)
-        next unless File.directory?(directory_path)
+    def max_mtime_fixtures
+      @max_mtime_fixtures ||=
+        FactoryBot.definition_file_paths.flat_map { |path|
+          directory_path = File.expand_path(path)
 
-        Dir[File.join(directory_path, "**", "*.rb")].sort.each do |file|
-          fixtures_checksum << Digest::MD5.hexdigest(IO.read(file))
-        end
-      end
+          if File.directory?(directory_path)
+            Dir[File.join(directory_path, "**", "*.rb")].map { |file| File.mtime(file) }
+          end
+        }.compact.max.round(6)
+    end
 
-      if !File.exist?(FACTORIES_CHECKSUM_PATH) || fixtures_checksum != File.read(FACTORIES_CHECKSUM_PATH)
-        fixtures_checksum
-      end
+    def cached_mtime_fixtures
+      connection.query_value(<<-SQL) || Time.zone.at(0)
+        CREATE TABLE IF NOT EXISTS __factory_bot_preload_cache(fixtures_time timestamptz);
+        SELECT * FROM __factory_bot_preload_cache
+      SQL
+    end
+
+    def caching_max_mtime_fixtures
+      connection.execute(<<-SQL)
+        TRUNCATE TABLE __factory_bot_preload_cache;
+        INSERT INTO __factory_bot_preload_cache VALUES ('#{max_mtime_fixtures.iso8601(6)}')
+      SQL
     end
 
     def load_models
