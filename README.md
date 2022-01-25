@@ -1,6 +1,6 @@
 # factory_bot-preload
 
-[![Travis-CI](https://travis-ci.org/fnando/factory_bot-preload.svg)](https://travis-ci.org/fnando/factory_bot-preload)
+[![ruby-tests](https://github.com/fnando/factory_bot-preload/actions/workflows/ruby-tests.yml/badge.svg)](https://github.com/fnando/factory_bot-preload/actions/workflows/ruby-tests.yml)
 [![Gem](https://img.shields.io/gem/v/factory_bot-preload.svg)](https://rubygems.org/gems/factory_bot-preload)
 [![Gem](https://img.shields.io/gem/dt/factory_bot-preload.svg)](https://rubygems.org/gems/factory_bot-preload)
 
