@@ -1,7 +1,6 @@
 # factory_bot-preload
 
 [![Travis-CI](https://travis-ci.org/fnando/factory_bot-preload.svg)](https://travis-ci.org/fnando/factory_bot-preload)
-[![Test Coverage](https://codeclimate.com/github/fnando/factory_bot-preload/badges/coverage.svg)](https://codeclimate.com/github/fnando/factory_bot-preload/coverage)
 [![Gem](https://img.shields.io/gem/v/factory_bot-preload.svg)](https://rubygems.org/gems/factory_bot-preload)
 [![Gem](https://img.shields.io/gem/dt/factory_bot-preload.svg)](https://rubygems.org/gems/factory_bot-preload)
 
