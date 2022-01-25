@@ -6,6 +6,7 @@ require "factory_bot/syntax/methods"
 module FactoryBot
   module Preload
     def self.minitest
+      FactoryBot::Preload::Helpers.load_models
       FactoryBot::Preload.clean
       FactoryBot::Preload.run
     end
