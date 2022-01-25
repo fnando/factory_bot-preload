@@ -2,13 +2,12 @@
 
 ActiveRecord::Schema.define(version: 0) do
   begin
-    drop_table :users
-    drop_table :skills
-    drop_table :preloads
-    drop_table :categories
-    drop_table :categories_users
-    drop_table :assets
-  rescue Exception => error
+    drop_table :users if table_exists?(:users)
+    drop_table :skills if table_exists?(:skills)
+    drop_table :preloads if table_exists?(:preloads)
+    drop_table :categories if table_exists?(:categories)
+    drop_table :categories_users if table_exists?(:categories_users)
+    drop_table :assets if table_exists?(:assets)
   end
 
   create_table :users do |t|
@@ -27,8 +26,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.references :user
   end
 
-  create_table :categories do |t|
-  end
+  create_table :categories
 
   create_table :categories_users, id: false do |t|
     t.references :category

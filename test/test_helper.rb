@@ -6,7 +6,7 @@ SimpleCov.start do
 end
 
 ENV["RAILS_ENV"] = "test"
-ENV["BUNDLE_GEMFILE"] = File.dirname(__FILE__) + "/../Gemfile"
+ENV["BUNDLE_GEMFILE"] = "#{File.dirname(__FILE__)}/../Gemfile"
 ENV["DATABASE_URL"] = "sqlite3::memory:"
 
 require "bundler/setup"
@@ -22,7 +22,7 @@ require "minitest/utils"
 
 class SampleApplication < ::Rails::Application
   config.api = true
-  config.root = __dir__ + "/../spec/support/app"
+  config.root = "#{__dir__}/../spec/support/app"
   config.active_support.deprecation = :log
   config.eager_load = false
 end
@@ -32,7 +32,7 @@ require "rails/test_help"
 
 ActiveRecord::Migration.verbose = true
 ActiveRecord::Base.establish_connection ENV["DATABASE_URL"]
-load __dir__ + "/../spec/support/app/db/schema.rb"
+load "#{__dir__}/../spec/support/app/db/schema.rb"
 
 module ActiveSupport
   class TestCase
@@ -41,6 +41,6 @@ module ActiveSupport
 end
 
 require "factory_bot/preload"
-require __dir__ + "/../spec/support/factories"
+require "#{__dir__}/../spec/support/factories"
 
 FactoryBot::Preload.minitest

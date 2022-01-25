@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 require "bundler/gem_tasks"
+require "rubocop/rake_task"
+
+RuboCop::RakeTask.new
 
 case ENV["TEST_FRAMEWORK"]
 when "rspec"
   require "rspec/core/rake_task"
   RSpec::Core::RakeTask.new
 
-  task default: :spec
+  task default: %i[spec rubocop]
 when "minitest"
   require "rake/testtask"
 
@@ -19,10 +22,10 @@ when "minitest"
     t.warning = false
   end
 
-  task default: :test
+  task default: %i[test rubocop]
 else
   task :default do
-    system "TEST_FRAMEWORK=rspec bundle exec rake spec"
-    system "TEST_FRAMEWORK=minitest bundle exec rake test"
+    system "TEST_FRAMEWORK=rspec bundle exec rake"
+    system "TEST_FRAMEWORK=minitest bundle exec rake"
   end
 end

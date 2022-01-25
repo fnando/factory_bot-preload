@@ -8,7 +8,9 @@ module FactoryBot
       def self.load_models
         return unless defined?(Rails)
 
-        Dir[Rails.application.root.join("app/models/**/*.rb")].sort.each do |file|
+        models_path = Rails.application.root.join("app/models/**/*.rb")
+
+        Dir[models_path].sort.each do |file|
           require_dependency file
         end
       end
@@ -35,7 +37,7 @@ module FactoryBot
       end
 
       def factory(name, model = nil, &block)
-        if block_given?
+        if block
           factory_set(name, &block)
         else
           factory_get(name, model)
@@ -51,7 +53,8 @@ module FactoryBot
         end
 
         unless factory
-          raise "Couldn't find #{name.inspect} factory for #{model.name.inspect} model"
+          raise "Couldn't find #{name.inspect} factory " \
+                "for #{model.name.inspect} model"
         end
 
         factory

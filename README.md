@@ -1,16 +1,21 @@
 # factory_bot-preload
 
 [![Travis-CI](https://travis-ci.org/fnando/factory_bot-preload.svg)](https://travis-ci.org/fnando/factory_bot-preload)
-[![Code Climate](https://codeclimate.com/github/fnando/factory_bot-preload/badges/gpa.svg)](https://codeclimate.com/github/fnando/factory_bot-preload)
 [![Test Coverage](https://codeclimate.com/github/fnando/factory_bot-preload/badges/coverage.svg)](https://codeclimate.com/github/fnando/factory_bot-preload/coverage)
 [![Gem](https://img.shields.io/gem/v/factory_bot-preload.svg)](https://rubygems.org/gems/factory_bot-preload)
 [![Gem](https://img.shields.io/gem/dt/factory_bot-preload.svg)](https://rubygems.org/gems/factory_bot-preload)
 
-We all love Rails fixtures because they're fast, but we hate to deal with YAML/CSV/SQL files. Here enters [factory_bot](https://rubygems.org/gems/factory_bot) (FB).
+We all love Rails fixtures because they're fast, but we hate to deal with
+YAML/CSV/SQL files. Here enters
+[factory_bot](https://rubygems.org/gems/factory_bot) (FB).
 
-Now, you can easily create records by using predefined factories. The problem is that hitting the database everytime to create records is pretty slow. And believe me, you'll feel the pain when you have lots of tests/specs.
+Now, you can easily create records by using predefined factories. The problem is
+that hitting the database everytime to create records is pretty slow. And
+believe me, you'll feel the pain when you have lots of tests/specs.
 
-So here enters Factory Bot Preload (FBP). You can define which factories will be preloaded, so you don't have to recreate it every time (that will work for 99.37% of the time, according to statistics I just made up).
+So here enters Factory Bot Preload (FBP). You can define which factories will be
+preloaded, so you don't have to recreate it every time (that will work for
+99.37% of the time, according to statistics I just made up).
 
 ## Installation
 
@@ -18,7 +23,7 @@ So here enters Factory Bot Preload (FBP). You can define which factories will be
 
 ## Intructions
 
-### Installation
+### Setup
 
 Add both FB and FBP to your Gemfile:
 
@@ -208,27 +213,25 @@ That's it!
 
 ## Maintainer
 
-* Nando Vieira (http://nandovieira.com)
+- [Nando Vieira](https://github.com/fnando)
+
+## Contributors
+
+- https://github.com/fnando/factory_bot-preload/contributors
+
+## Contributing
+
+For more details about how to contribute, please read
+https://github.com/fnando/factory_bot-preload/blob/main/CONTRIBUTING.md.
 
 ## License
 
-(The MIT License)
+The gem is available as open source under the terms of the
+[MIT License](https://opensource.org/licenses/MIT). A copy of the license can be
+found at https://github.com/fnando/factory_bot-preload/blob/main/LICENSE.md.
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+## Code of Conduct
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Everyone interacting in the factory_bot-preload project's codebases, issue
+trackers, chat rooms and mailing lists is expected to follow the
+[code of conduct](https://github.com/fnando/factory_bot-preload/blob/main/CODE_OF_CONDUCT.md).

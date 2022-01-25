@@ -6,13 +6,8 @@ require "active_record"
 module FactoryBot
   module Preload
     class << self
-      attr_accessor :preloaders
-      attr_accessor :factories
-      attr_accessor :record_ids
-      attr_accessor :clean_with
-      attr_accessor :default_helper_name
-      attr_accessor :helper_name
-      attr_accessor :reserved_tables
+      attr_accessor :preloaders, :factories, :record_ids, :clean_with,
+                    :default_helper_name, :helper_name, :reserved_tables
     end
 
     self.preloaders = []

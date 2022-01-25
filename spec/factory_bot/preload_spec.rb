@@ -39,12 +39,16 @@ describe FactoryBot::Preload do
   end
 
   it "raises error for missing factories" do
-    expect { users(:mary) }.to raise_error(%[Couldn't find :mary factory for "User" model])
+    expect do
+      users(:mary)
+    end.to raise_error(%[Couldn't find :mary factory for "User" model])
   end
 
   it "raises error for missing clean type" do
     FactoryBot::Preload.clean_with = :invalid
-    expect { FactoryBot::Preload.clean }.to raise_error(%[Couldn't find invalid clean type])
+    expect do
+      FactoryBot::Preload.clean
+    end.to raise_error(%[Couldn't find invalid clean type])
   end
 
   it "ignores reserved table names when creating helpers" do
@@ -126,6 +130,8 @@ describe FactoryBot::Preload do
   end
 
   it "includes helpers into factory_bot" do
-    expect(FactoryBot::SyntaxRunner.included_modules).to include(FactoryBot::Preload::Helpers)
+    helpers_module = FactoryBot::Preload::Helpers
+
+    expect(FactoryBot::SyntaxRunner.included_modules).to include(helpers_module)
   end
 end
