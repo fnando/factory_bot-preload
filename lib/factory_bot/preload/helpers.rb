@@ -8,7 +8,7 @@ module FactoryBot
       def self.load_models
         return unless defined?(Rails)
 
-        Dir[Rails.application.root.join("app/models/**/*.rb")].each do |file|
+        Dir[Rails.application.root.join("app/models/**/*.rb")].sort.each do |file|
           require_dependency file
         end
       end
