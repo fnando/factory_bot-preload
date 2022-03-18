@@ -70,9 +70,7 @@ module FactoryBot
     end
 
     def self.active_record_names
-      names = active_record.descendants.collect(&:table_name).uniq.compact
-
-      names.reject {|name| reserved_tables.include?(name) }
+      connection.tables.reject {|name| reserved_tables.include?(name) }
     end
 
     def self.reload_factories
